@@ -448,9 +448,15 @@ gameOverRef.current=true;
 
 
 
-setHighScoreEligible(
-
 checkHighScore(score)
+
+.then(
+
+  result => {
+
+    setHighScoreEligible(result);
+
+  }
 
 );
 
@@ -1599,11 +1605,13 @@ currentForm.image
 
 
 
-saveHighScore(entry);
+saveHighScore(entry)
 
+.then(()=>{
 
+  setHighScoreSubmitted(true);
 
-setHighScoreSubmitted(true);
+});
 
 
 

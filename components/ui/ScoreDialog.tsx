@@ -372,7 +372,27 @@ ARCADE TIPS
 function HighScores(){
 
 
-const scores:HighScoreEntry[] = getHighScores();
+const [scores,setScores] = React.useState<HighScoreEntry[]>([]);
+
+
+
+React.useEffect(()=>{
+
+
+  getHighScores()
+
+  .then(
+
+    result=>{
+
+      setScores(result);
+
+    }
+
+  );
+
+
+},[]);
 
 
 

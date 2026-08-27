@@ -1,3 +1,6 @@
+import { supabase } from "../lib/supabase";
+
+
 export type HighScoreEntry = {
 
   id:string;
@@ -22,52 +25,101 @@ export type HighScoreEntry = {
 
 
 
-const STORAGE_KEY =
+function mapRowToEntry(
 
-"form_drop_high_scores";
+  row:any
 
-
-
-
+):HighScoreEntry{
 
 
+  return {
 
-export function getHighScores():HighScoreEntry[]{
+    id:String(row.id),
+
+    name:row.name,
+
+    score:row.score,
+
+    time:row.time,
+
+    formName:row.form_name,
+
+    formCategory:row.form_category,
+
+    formImage:row.form_image,
+
+    createdAt:new Date(
+      row.created_at
+    ).getTime()
+
+  };
 
 
-  if(
-
-    typeof window === "undefined"
-
-  ){
-
-    return [];
-
-  }
+}
 
 
 
 
 
-  const saved =
 
-    localStorage.getItem(
 
-      STORAGE_KEY
+export async function getHighScores():Promise<HighScoreEntry[]>{
+
+
+  const {
+
+    data,
+
+    error
+
+  } = await supabase
+
+    .from("high_scores")
+
+    .select("*")
+
+    .order(
+
+      "score",
+
+      {
+
+        ascending:false
+
+      }
+
+    )
+
+    .limit(10);
+
+
+
+
+
+  if(error){
+
+
+    console.error(
+
+      "LOAD HIGH SCORES ERROR",
+
+      {
+
+        message:error.message,
+
+        details:error.details,
+
+        hint:error.hint,
+
+        code:error.code
+
+      }
 
     );
 
 
-
-
-
-  if(
-
-    !saved
-
-  ){
-
     return [];
+
 
   }
 
@@ -75,38 +127,17 @@ export function getHighScores():HighScoreEntry[]{
 
 
 
-  try{
+  return (
 
+    data || []
 
-    const parsed = JSON.parse(saved);
+  )
 
+  .map(
 
+    mapRowToEntry
 
-    if(
-
-      Array.isArray(parsed)
-
-    ){
-
-      return parsed;
-
-    }
-
-
-
-    return [];
-
-
-
-  }
-
-  catch{
-
-
-    return [];
-
-  }
-
+  );
 
 
 }
@@ -119,7 +150,7 @@ export function getHighScores():HighScoreEntry[]{
 
 
 
-export function saveHighScore(
+export async function saveHighScore(
 
   entry:HighScoreEntry
 
@@ -127,56 +158,81 @@ export function saveHighScore(
 
 
 
-  const scores =
+  const {
 
-    getHighScores();
+    error
 
+  } = await supabase
 
+    .from("high_scores")
 
-
-
-  scores.push(entry);
-
-
+    .insert({
 
 
-
-  scores.sort(
-
-    (a,b)=>
-
-      b.score -
-
-      a.score
-
-  );
+      name:entry.name,
 
 
+      score:entry.score,
+
+
+      time:entry.time,
+
+
+      form_name:entry.formName,
+
+
+      form_category:entry.formCategory,
+
+
+      form_image:entry.formImage,
+
+
+      created_at:
+
+        new Date(
+
+          entry.createdAt
+
+        ).toISOString()
+
+
+    });
 
 
 
-  const topScores =
 
-    scores.slice(
 
-      0,
 
-      10
+  if(error){
+
+
+    console.error(
+
+      "SAVE HIGH SCORE ERROR",
+
+      {
+
+        message:error.message,
+
+        details:error.details,
+
+        hint:error.hint,
+
+        code:error.code
+
+      }
 
     );
 
 
+    return false;
+
+
+  }
 
 
 
-  localStorage.setItem(
-
-    STORAGE_KEY,
-
-    JSON.stringify(topScores)
-
-  );
-
+  return true;
 
 
 }
@@ -189,17 +245,17 @@ export function saveHighScore(
 
 
 
-export function qualifiesForHighScore(
+export async function qualifiesForHighScore(
 
   score:number
 
-){
+):Promise<boolean>{
 
 
 
   const scores =
 
-    getHighScores();
+    await getHighScores();
 
 
 
@@ -230,7 +286,6 @@ export function qualifiesForHighScore(
     ].score
 
   );
-
 
 
 }
@@ -265,62 +320,50 @@ data:{
 
 
 
+  return {
 
 
-return {
+    id:
+
+    crypto.randomUUID(),
 
 
+    name:
 
-  id:
-
-  crypto.randomUUID(),
-
+    data.name.trim(),
 
 
-  name:
+    score:
 
-  data.name.trim(),
-
-
-
-  score:
-
-  data.score,
+    data.score,
 
 
+    time:
 
-  time:
-
-  data.time,
-
+    data.time,
 
 
-  formName:
+    formName:
 
-  data.formName,
-
-
-
-  formCategory:
-
-  data.formCategory,
+    data.formName,
 
 
+    formCategory:
 
-  formImage:
-
-  data.formImage,
-
+    data.formCategory,
 
 
-  createdAt:
+    formImage:
 
-  Date.now()
+    data.formImage,
 
 
+    createdAt:
 
-};
+    Date.now()
 
+
+  };
 
 
 }
@@ -333,28 +376,56 @@ return {
 
 
 
-export function clearHighScores(){
+export async function clearHighScores(){
 
 
-  if(
 
-    typeof window === "undefined"
+  const {
 
-  ){
+    error
 
-    return;
+  } = await supabase
+
+    .from("high_scores")
+
+    .delete()
+
+    .neq(
+
+      "id",
+
+      0
+
+    );
+
+
+
+
+
+
+  if(error){
+
+
+    console.error(
+
+      "CLEAR HIGH SCORES ERROR",
+
+      {
+
+        message:error.message,
+
+        details:error.details,
+
+        hint:error.hint,
+
+        code:error.code
+
+      }
+
+    );
+
 
   }
-
-
-
-
-
-  localStorage.removeItem(
-
-    STORAGE_KEY
-
-  );
 
 
 }
