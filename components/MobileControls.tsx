@@ -40,105 +40,123 @@ const startX = useRef(0);
 
 const startY = useRef(0);
 
+const lastMoveX = useRef(0);
+
+const startTime = useRef(0);
+
 const moved = useRef(false);
 
 const dropping = useRef(false);
 
 
 
-function start(e:React.TouchEvent){
+function touchStart(e:React.TouchEvent){
 
 e.preventDefault();
 
-e.stopPropagation();
-
 
 const touch=e.touches[0];
+
 
 startX.current=touch.clientX;
 
 startY.current=touch.clientY;
 
+lastMoveX.current=touch.clientX;
+
+startTime.current=Date.now();
+
 moved.current=false;
+
 
 }
 
 
 
-function move(e:React.TouchEvent){
+function touchMove(e:React.TouchEvent){
 
 e.preventDefault();
-
-e.stopPropagation();
 
 
 const touch=e.touches[0];
 
 
-const x = touch.clientX - startX.current;
-
-const y = touch.clientY - startY.current;
-
+const deltaX =
+touch.clientX - startX.current;
 
 
-// prevent repeated triggers
-
-if(moved.current){
-
-return;
-
-}
+const deltaY =
+touch.clientY - startY.current;
 
 
 
-// horizontal movement
+// soft drop
 
-if(Math.abs(x) > Math.abs(y) && Math.abs(x) > 15){
-
-
-moved.current=true;
-
-
-if(x > 0){
-
-onRight();
-
-}
-
-else{
-
-onLeft();
-
-}
-
-
-return;
-
-}
-
-
-
-// downward soft drop
-
-if(y > 20){
-
-moved.current=true;
+if(deltaY > 30 && !dropping.current){
 
 dropping.current=true;
 
 onDropStart();
 
-}
+return;
 
 }
 
 
 
-function end(e:React.TouchEvent){
+// horizontal swipe movement
+
+const stepDistance=25;
+
+
+const movement =
+touch.clientX - lastMoveX.current;
+
+
+
+if(Math.abs(movement) >= stepDistance){
+
+
+const amount =
+Math.floor(Math.abs(deltaX) / stepDistance);
+
+
+
+if(movement > 0){
+
+for(let i=0;i<amount;i++){
+
+onRight();
+
+}
+
+}
+
+else{
+
+for(let i=0;i<amount;i++){
+
+onLeft();
+
+}
+
+}
+
+
+lastMoveX.current=touch.clientX;
+
+moved.current=true;
+
+}
+
+
+}
+
+
+
+function touchEnd(e:React.TouchEvent){
 
 e.preventDefault();
-
-e.stopPropagation();
 
 
 if(dropping.current){
@@ -153,7 +171,16 @@ return;
 
 
 
-if(!moved.current){
+const duration =
+Date.now()-startTime.current;
+
+
+const movedDistance =
+Math.abs(startX.current-lastMoveX.current);
+
+
+
+if(!moved.current && duration < 250 && movedDistance < 15){
 
 onRotate();
 
@@ -164,30 +191,31 @@ onRotate();
 
 
 
+
 return (
 
 <div
 
-className="mobile-touch-zone"
+className="mobile-touch-layer"
 
-onTouchStart={start}
+onTouchStart={touchStart}
 
-onTouchMove={move}
+onTouchMove={touchMove}
 
-onTouchEnd={end}
+onTouchEnd={touchEnd}
 
 >
 
 
 <style jsx>{`
 
-.mobile-touch-zone {
+.mobile-touch-layer {
 
-position:absolute;
+position:fixed;
 
 inset:0;
 
-z-index:50;
+z-index:100;
 
 touch-action:none;
 
@@ -203,7 +231,7 @@ user-select:none;
 
 @media(min-width:901px){
 
-.mobile-touch-zone {
+.mobile-touch-layer{
 
 display:none;
 

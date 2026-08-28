@@ -195,7 +195,6 @@ export default function GameLayout({
 }:Props){
 
 
-
 const modalOpen =
 
 showScore ||
@@ -209,6 +208,21 @@ showHighScores;
 return (
 
 <div className="game-container">
+
+
+<MobileControls
+
+onLeft={onMoveLeft}
+
+onRight={onMoveRight}
+
+onRotate={onRotate}
+
+onDropStart={onDropStart}
+
+onDropEnd={onDropEnd}
+
+/>
 
 
 {
@@ -273,6 +287,7 @@ FORM//DROP
 
 </h1>
 
+
 <TopBar
 
 onPause={onPause}
@@ -286,15 +301,6 @@ onScore={onScore}
 onHighScores={onHighScores}
 
 />
-
-
-
-<div className="game-layout">
-
-
-
-<div className="play-column">
-
 
 
 <div className="mobile-form">
@@ -313,8 +319,10 @@ frenzy={frenzy}
 
 </div>
 
+<div className="game-layout">
 
 
+<div className="play-column">
 
 
 <div className="top-game-info">
@@ -323,15 +331,11 @@ frenzy={frenzy}
 <div className="stat-box">
 
 <span>
-
 SCORE
-
 </span>
 
 <strong>
-
 {score}
-
 </strong>
 
 </div>
@@ -353,15 +357,11 @@ nextPiece={nextPiece}
 <div className="stat-box">
 
 <span>
-
 TIME
-
 </span>
 
 <strong>
-
 {time}s
-
 </strong>
 
 </div>
@@ -369,11 +369,6 @@ TIME
 
 </div>
 
-
-
-
-
-<div className="board-wrap">
 
 
 <GameBoard
@@ -387,28 +382,6 @@ flash={flash}
 clearing={clearing}
 
 />
-
-
-
-<MobileControls
-
-onLeft={onMoveLeft}
-
-onRight={onMoveRight}
-
-onRotate={onRotate}
-
-onDropStart={onDropStart}
-
-onDropEnd={onDropEnd}
-
-/>
-
-
-</div>
-
-
-
 
 
 {
@@ -429,8 +402,7 @@ message &&
 
 
 
-
-<div className="form-column">
+<div className="form-column desktop-form">
 
 
 <GamePanels
@@ -444,7 +416,6 @@ formRevealed={formRevealed}
 frenzy={frenzy}
 
 />
-
 
 
 </div>
@@ -473,8 +444,6 @@ onHighScores={onHighScores}
 />
 
 }
-
-
 
 
 
@@ -509,8 +478,6 @@ onExit={onExit}
 
 
 
-
-
 {
 showScore &&
 
@@ -528,8 +495,6 @@ onClose={closeScore}
 
 
 
-
-
 {
 showHelp &&
 
@@ -542,8 +507,6 @@ onClose={closeHelp}
 />
 
 }
-
-
 
 
 
@@ -567,6 +530,8 @@ onClose={closeHighScores}
 </>
 
 }
+
+
 
 <style jsx>{`
 
@@ -593,6 +558,8 @@ padding:6px;
 box-sizing:border-box;
 
 overflow-x:hidden;
+
+position:relative;
 
 }
 
@@ -645,16 +612,6 @@ display:flex;
 flex-direction:column;
 
 align-items:center;
-
-position:relative;
-
-}
-
-
-
-.mobile-form {
-
-display:none;
 
 }
 
@@ -740,14 +697,6 @@ justify-content:center;
 
 
 
-.board-wrap {
-
-position:relative;
-
-}
-
-
-
 .form-column {
 
 width:270px;
@@ -755,6 +704,14 @@ width:270px;
 display:flex;
 
 flex-direction:column;
+
+}
+
+
+
+.mobile-form {
+
+display:none;
 
 }
 
@@ -773,7 +730,6 @@ text-align:center;
 min-height:22px;
 
 }
-
 
 
 .frenzy-banner {
@@ -844,9 +800,8 @@ animation:revealExplosion .8s ease;
 
 
 
-
-
 @keyframes frenzyPulse {
+
 
 0% {
 
@@ -854,11 +809,13 @@ transform:scale(1);
 
 }
 
+
 50% {
 
 transform:scale(1.12);
 
 }
+
 
 100% {
 
@@ -866,11 +823,13 @@ transform:scale(1);
 
 }
 
+
 }
 
 
 
 @keyframes revealExplosion {
+
 
 0% {
 
@@ -880,6 +839,7 @@ opacity:0;
 
 }
 
+
 40% {
 
 transform:scale(1.2);
@@ -888,6 +848,7 @@ opacity:1;
 
 }
 
+
 100% {
 
 transform:scale(1);
@@ -895,6 +856,7 @@ transform:scale(1);
 opacity:0;
 
 }
+
 
 }
 
@@ -917,7 +879,7 @@ gap:4px;
 
 
 
-.form-column {
+.desktop-form {
 
 display:none;
 
@@ -927,11 +889,11 @@ display:none;
 
 .mobile-form {
 
-display:block;
+display:flex;
 
 width:100%;
 
-max-width:320px;
+max-width:300px;
 
 order:1;
 
@@ -941,9 +903,17 @@ order:1;
 
 .play-column {
 
+order:2;
+
 width:100%;
 
-order:2;
+}
+
+
+
+.top-game-info {
+
+grid-template-columns:80px 110px 80px;
 
 }
 
@@ -962,9 +932,9 @@ height:100dvh;
 
 min-height:0;
 
-overflow:hidden;
+padding:4px;
 
-padding:3px;
+overflow:hidden;
 
 }
 
@@ -972,7 +942,7 @@ padding:3px;
 
 h1 {
 
-font-size:30px;
+font-size:32px;
 
 margin-bottom:4px;
 
@@ -982,11 +952,9 @@ margin-bottom:4px;
 
 .top-game-info {
 
-grid-template-columns:65px 90px 65px;
+grid-template-columns:70px 100px 70px;
 
-gap:4px;
-
-margin-bottom:4px;
+gap:6px;
 
 }
 
@@ -994,7 +962,7 @@ margin-bottom:4px;
 
 .stat-box {
 
-height:38px;
+height:40px;
 
 }
 
@@ -1002,7 +970,7 @@ height:38px;
 
 .stat-box strong {
 
-font-size:12px;
+font-size:13px;
 
 }
 
@@ -1012,19 +980,7 @@ font-size:12px;
 
 width:90px;
 
-height:55px;
-
-}
-
-
-
-.board-wrap {
-
-transform:scale(.72);
-
-transform-origin:top center;
-
-margin-bottom:-95px;
+height:60px;
 
 }
 
@@ -1032,7 +988,17 @@ margin-bottom:-95px;
 
 .mobile-form {
 
-max-width:280px;
+max-width:290px;
+
+}
+
+
+
+.game-layout {
+
+transform:scale(.88);
+
+transform-origin:top center;
 
 }
 
@@ -1043,7 +1009,6 @@ max-width:280px;
 
 
 `}</style>
-
 
 
 </div>
