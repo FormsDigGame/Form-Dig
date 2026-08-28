@@ -195,13 +195,31 @@ Swipe down to activate a soft drop and move faster.
 
 <div style={labelStyle}>
 
-DESKTOP
+KEYBOARD CONTROLS
 
 </div>
 
 <p>
 
-Arrow keys move and rotate. ESC pauses the game.
+← → / A D : Move Left & Right
+
+</p>
+
+<p>
+
+↑ / W / SPACE : Rotate
+
+</p>
+
+<p>
+
+↓ / S : Soft Drop
+
+</p>
+
+<p>
+
+ESC : Pause / Resume
 
 </p>
 
