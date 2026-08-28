@@ -19,7 +19,6 @@ type Props = {
 
 
 
-
 export default function ScoreDialog({
 
   title="SCORING",
@@ -112,8 +111,6 @@ title==="HIGH SCORES"
 );
 
 }
-
-
 
 
 
@@ -242,14 +239,6 @@ OBJECTIVE
 );
 
 }
-
-
-
-
-
-
-
-
 
 function Scoring(){
 
@@ -520,6 +509,11 @@ TIME: {entry.time}s
 
 }
 
+
+
+
+
+
 const overlayStyle:React.CSSProperties={
 
 position:"fixed",
@@ -541,6 +535,7 @@ padding:"10px",
 fontFamily:"monospace"
 
 };
+
 
 
 
@@ -580,6 +575,7 @@ flexDirection:"column"
 
 
 
+
 const closeStyle:React.CSSProperties={
 
 position:"absolute",
@@ -606,10 +602,6 @@ cursor:"pointer"
 
 };
 
-
-
-
-
 const titleStyle:React.CSSProperties={
 
 fontSize:"clamp(24px,7vw,34px)",
@@ -627,6 +619,7 @@ margin:"0 0 15px",
 textShadow:"3px 3px #ff1744"
 
 };
+
 
 
 
@@ -654,6 +647,7 @@ overflow:"hidden"
 
 
 
+
 const sectionStyle:React.CSSProperties={
 
 display:"flex",
@@ -667,6 +661,7 @@ height:"100%",
 minHeight:0
 
 };
+
 
 
 
@@ -690,6 +685,7 @@ letterSpacing:1
 
 
 
+
 const cardStyle:React.CSSProperties={
 
 background:"#050505",
@@ -701,6 +697,7 @@ borderRadius:8,
 padding:10
 
 };
+
 
 
 
@@ -722,6 +719,7 @@ letterSpacing:1
 
 
 
+
 const listStyle:React.CSSProperties={
 
 margin:"6px 0 12px",
@@ -736,15 +734,14 @@ lineHeight:1.5
 
 
 
+
 const highScoreListStyle:React.CSSProperties={
 
 flex:1,
 
 minHeight:0,
 
-height:"100%",
-
-overflowY:"scroll",
+overflowY:"auto",
 
 WebkitOverflowScrolling:"touch",
 
@@ -755,6 +752,7 @@ paddingBottom:20,
 scrollbarWidth:"thin"
 
 };
+
 
 
 
@@ -778,6 +776,7 @@ marginBottom:10
 
 
 
+
 const rankStyle:React.CSSProperties={
 
 color:"#ffea00",
@@ -787,6 +786,7 @@ fontWeight:"900",
 fontSize:18
 
 };
+
 
 
 
@@ -806,6 +806,7 @@ fontSize:18
 
 
 
+
 const scoreStyle:React.CSSProperties={
 
 color:"#00e676",
@@ -820,6 +821,7 @@ fontSize:20
 
 
 
+
 const smallStyle:React.CSSProperties={
 
 color:"#aaa",
@@ -829,6 +831,7 @@ fontSize:12,
 marginTop:3
 
 };
+
 
 
 
