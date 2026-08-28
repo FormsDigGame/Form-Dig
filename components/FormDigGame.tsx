@@ -276,7 +276,21 @@ const frenzyTimerRef =
 
 useRef<number[]>([]);
 
+const musicRef = useRef<HTMLAudioElement | null>(null);
 
+useEffect(() => {
+  const audio = new Audio("/audio/theme.mp3");
+  audio.loop = true;
+  audio.volume = 0.35;
+
+  musicRef.current = audio;
+
+  return () => {
+    audio.pause();
+    audio.currentTime = 0;
+    musicRef.current = null;
+  };
+}, []);
 
 
 
@@ -466,7 +480,10 @@ checkHighScore(score)
 
 function exitGame(){
 
-
+if (musicRef.current) {
+  musicRef.current.pause();
+  musicRef.current.currentTime = 0;
+}
 
 stopFrenzy();
 
@@ -700,6 +717,12 @@ triggerFrenzy(4);
 
 
 function startGame(){
+
+if (musicRef.current) {
+  musicRef.current
+    .play()
+    .catch(() => {});
+}
 
 
 
