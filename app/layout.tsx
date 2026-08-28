@@ -13,13 +13,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://forms-drop.vercel.app/"),
+
   title: "FORM//DROP",
   description: "Neon arcade falling-block puzzle game",
 
   openGraph: {
     title: "FORM//DROP",
     description: "Neon arcade falling-block puzzle game",
-    url: "https://forms-drop.formsdropgame.workers.dev/",
+    url: "https://forms-drop.vercel.app/",
     siteName: "FORM//DROP",
     images: [
       {
