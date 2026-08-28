@@ -712,13 +712,8 @@ function endGame(){
 stopFrenzy();
 
 
-pauseMusic();
 
-
-setGameOver(true);
-
-
-gameOverRef.current=true;
+setHighScoreEligible(false);
 
 
 
@@ -726,15 +721,20 @@ checkHighScore(score)
 
 .then(
 
-result=>{
+  result => {
 
+    setHighScoreEligible(result);
 
-setHighScoreEligible(result);
-
-
-}
+  }
 
 );
+
+
+
+setGameOver(true);
+
+
+gameOverRef.current=true;
 
 
 
@@ -2160,7 +2160,14 @@ e:KeyboardEvent
 
 ){
 
+if(
+e.target instanceof HTMLInputElement ||
+e.target instanceof HTMLTextAreaElement
+){
 
+return;
+
+}
 
 if(
 
