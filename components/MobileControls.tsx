@@ -36,21 +36,59 @@ export default function MobileControls({
 }:Props){
 
 
-const startX = useRef(0);
+const startX=useRef(0);
 
-const startY = useRef(0);
+const startY=useRef(0);
 
-const lastMoveX = useRef(0);
+const lastX=useRef(0);
 
-const startTime = useRef(0);
+const startTime=useRef(0);
 
-const moved = useRef(false);
+const moved=useRef(false);
 
-const dropping = useRef(false);
+const dropping=useRef(false);
 
 
 
-function touchStart(e:React.TouchEvent){
+function isInteractiveElement(
+
+target:EventTarget|null
+
+){
+
+if(!(target instanceof HTMLElement)){
+
+return false;
+
+}
+
+
+return Boolean(
+
+target.closest(
+
+"button, input, textarea, select, a, [role='button']"
+
+)
+
+);
+
+}
+
+
+
+function touchStart(
+
+e:React.TouchEvent
+
+){
+
+if(isInteractiveElement(e.target)){
+
+return;
+
+}
+
 
 e.preventDefault();
 
@@ -62,18 +100,30 @@ startX.current=touch.clientX;
 
 startY.current=touch.clientY;
 
-lastMoveX.current=touch.clientX;
+lastX.current=touch.clientX;
 
 startTime.current=Date.now();
 
 moved.current=false;
 
+dropping.current=false;
 
 }
 
 
 
-function touchMove(e:React.TouchEvent){
+function touchMove(
+
+e:React.TouchEvent
+
+){
+
+if(isInteractiveElement(e.target)){
+
+return;
+
+}
+
 
 e.preventDefault();
 
@@ -81,18 +131,26 @@ e.preventDefault();
 const touch=e.touches[0];
 
 
-const deltaX =
-touch.clientX - startX.current;
+const deltaX=
+
+touch.clientX-startX.current;
 
 
-const deltaY =
-touch.clientY - startY.current;
+const deltaY=
+
+touch.clientY-startY.current;
 
 
 
-// soft drop
+if(
 
-if(deltaY > 30 && !dropping.current){
+deltaY>30 &&
+
+Math.abs(deltaY)>Math.abs(deltaX) &&
+
+!dropping.current
+
+){
 
 dropping.current=true;
 
@@ -104,27 +162,46 @@ return;
 
 
 
-// horizontal swipe movement
+if(dropping.current){
 
-const stepDistance=25;
+return;
 
-
-const movement =
-touch.clientX - lastMoveX.current;
+}
 
 
 
-if(Math.abs(movement) >= stepDistance){
+const movement=
 
-
-const amount =
-Math.floor(Math.abs(deltaX) / stepDistance);
+touch.clientX-lastX.current;
 
 
 
-if(movement > 0){
+const stepDistance=22;
 
-for(let i=0;i<amount;i++){
+
+if(Math.abs(movement)>=stepDistance){
+
+
+const steps=
+
+Math.floor(
+
+Math.abs(movement)/stepDistance
+
+);
+
+
+if(movement>0){
+
+for(
+
+let i=0;
+
+i<steps;
+
+i++
+
+){
 
 onRight();
 
@@ -134,7 +211,15 @@ onRight();
 
 else{
 
-for(let i=0;i<amount;i++){
+for(
+
+let i=0;
+
+i<steps;
+
+i++
+
+){
 
 onLeft();
 
@@ -143,18 +228,28 @@ onLeft();
 }
 
 
-lastMoveX.current=touch.clientX;
+lastX.current=touch.clientX;
 
 moved.current=true;
 
 }
 
-
 }
 
 
 
-function touchEnd(e:React.TouchEvent){
+function touchEnd(
+
+e:React.TouchEvent
+
+){
+
+if(isInteractiveElement(e.target)){
+
+return;
+
+}
+
 
 e.preventDefault();
 
@@ -170,25 +265,50 @@ return;
 }
 
 
+const duration=
 
-const duration =
 Date.now()-startTime.current;
 
 
-const movedDistance =
-Math.abs(startX.current-lastMoveX.current);
+const totalX=
+
+Math.abs(
+
+e.changedTouches[0].clientX-
+
+startX.current
+
+);
 
 
+const totalY=
 
-if(!moved.current && duration < 250 && movedDistance < 15){
+Math.abs(
+
+e.changedTouches[0].clientY-
+
+startY.current
+
+);
+
+
+if(
+
+!moved.current &&
+
+duration<300 &&
+
+totalX<15 &&
+
+totalY<15
+
+){
 
 onRotate();
 
 }
 
-
 }
-
 
 
 
@@ -215,7 +335,7 @@ position:fixed;
 
 inset:0;
 
-z-index:100;
+z-index:10;
 
 touch-action:none;
 
@@ -224,6 +344,8 @@ user-select:none;
 -webkit-user-select:none;
 
 -webkit-touch-callout:none;
+
+pointer-events:auto;
 
 }
 
