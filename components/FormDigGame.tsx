@@ -211,10 +211,31 @@ useState(true);
 
 
 
+/* music controls */
+
+const [musicMuted,setMusicMuted] =
+
+useState(false);
 
 
-// NEW: tracks when any dialog/menu panel is open.
-// This will force the game into a paused state.
+
+const musicMutedRef =
+
+useRef(false);
+
+
+
+const musicPlayingRef =
+
+useRef(false);
+
+
+
+const pageVisibleRef =
+
+useRef(true);
+
+
 
 const dialogOpen =
 
@@ -276,23 +297,102 @@ const frenzyTimerRef =
 
 useRef<number[]>([]);
 
-const musicRef = useRef<HTMLAudioElement | null>(null);
+
+
+const musicRef =
+
+useRef<HTMLAudioElement | null>(null);
+
+
 
 useEffect(() => {
-  const audio = new Audio("/audio/theme.mp3");
-  audio.loop = true;
-  audio.volume = 0.35;
 
-  musicRef.current = audio;
+const audio = new Audio("/audio/theme.mp3");
 
-  return () => {
-    audio.pause();
-    audio.currentTime = 0;
-    musicRef.current = null;
-  };
-}, []);
+audio.loop = true;
+
+audio.volume = 0.35;
+
+musicRef.current = audio;
 
 
+return()=>{
+
+audio.pause();
+
+audio.currentTime = 0;
+
+musicRef.current = null;
+
+};
+
+
+},[]);
+
+
+
+function playMusic(){
+
+if(
+
+musicRef.current &&
+
+!musicMutedRef.current &&
+
+pageVisibleRef.current &&
+
+!pausedRef.current &&
+
+!gameOverRef.current
+
+){
+
+musicRef.current.play().catch(()=>{});
+
+musicPlayingRef.current=true;
+
+}
+
+}
+
+
+
+function pauseMusic(){
+
+if(musicRef.current){
+
+musicRef.current.pause();
+
+musicPlayingRef.current=false;
+
+}
+
+}
+
+
+
+function toggleMusic(){
+
+const next = !musicMutedRef.current;
+
+musicMutedRef.current = next;
+
+setMusicMuted(next);
+
+
+if(next){
+
+pauseMusic();
+
+}
+
+else{
+
+playMusic();
+
+}
+
+}
 
 useEffect(()=>{
 
@@ -318,6 +418,18 @@ useEffect(()=>{
 
 pausedRef.current = paused;
 
+if(paused){
+
+pauseMusic();
+
+}
+
+else{
+
+playMusic();
+
+}
+
 },[paused]);
 
 
@@ -327,6 +439,12 @@ pausedRef.current = paused;
 useEffect(()=>{
 
 gameOverRef.current = gameOver;
+
+if(gameOver){
+
+pauseMusic();
+
+}
 
 },[gameOver]);
 
@@ -354,23 +472,167 @@ frenzyRef.current = frenzy;
 
 
 
-// NEW: opening any dialog automatically pauses gameplay.
-// Closing dialogs returns the game to the pause screen,
-// requiring RESUME before continuing.
-
 useEffect(()=>{
 
+const savedMute =
 
-if(dialogOpen && !paused && !gameOver){
+localStorage.getItem("formDigMusicMuted");
 
-setPaused(true);
 
-pausedRef.current=true;
+if(savedMute==="true"){
+
+musicMutedRef.current=true;
+
+setMusicMuted(true);
 
 }
 
 
-},[dialogOpen,paused,gameOver]);
+},[]);
+
+
+
+
+
+useEffect(()=>{
+
+localStorage.setItem(
+
+"formDigMusicMuted",
+
+String(musicMuted)
+
+);
+
+
+musicMutedRef.current = musicMuted;
+
+
+if(musicMuted){
+
+pauseMusic();
+
+}
+
+else{
+
+playMusic();
+
+}
+
+
+},[musicMuted]);
+
+
+
+
+
+useEffect(()=>{
+
+
+function handleVisibility(){
+
+
+const visible =
+
+document.visibilityState==="visible";
+
+
+pageVisibleRef.current = visible;
+
+
+
+if(!visible){
+
+pauseMusic();
+
+return;
+
+}
+
+
+
+if(
+
+!pausedRef.current &&
+
+!gameOverRef.current &&
+
+!showMenu
+
+){
+
+playMusic();
+
+}
+
+
+
+}
+
+
+
+document.addEventListener(
+
+"visibilitychange",
+
+handleVisibility
+
+);
+
+
+
+return()=>{
+
+
+document.removeEventListener(
+
+"visibilitychange",
+
+handleVisibility
+
+);
+
+
+
+};
+
+
+
+},[showMenu]);
+
+
+
+
+
+useEffect(()=>{
+
+
+if(showMenu){
+
+pauseMusic();
+
+}
+
+
+
+},[showMenu]);
+
+
+
+
+
+useEffect(()=>{
+
+
+if(dialogOpen){
+
+pauseMusic();
+
+}
+
+
+},[dialogOpen]);
 
 
 
@@ -454,6 +716,8 @@ function endGame(){
 stopFrenzy();
 
 
+pauseMusic();
+
 
 setGameOver(true);
 
@@ -466,11 +730,13 @@ checkHighScore(score)
 
 .then(
 
-  result => {
+result=>{
 
-    setHighScoreEligible(result);
 
-  }
+setHighScoreEligible(result);
+
+
+}
 
 );
 
@@ -478,12 +744,22 @@ checkHighScore(score)
 
 }
 
+
+
+
+
 function exitGame(){
 
-if (musicRef.current) {
-  musicRef.current.pause();
-  musicRef.current.currentTime = 0;
+
+pauseMusic();
+
+
+if(musicRef.current){
+
+musicRef.current.currentTime=0;
+
 }
+
 
 stopFrenzy();
 
@@ -505,7 +781,9 @@ pausedRef.current=false;
 
 setShowScore(false);
 
+
 setShowHelp(false);
+
 
 setShowHighScores(false);
 
@@ -516,10 +794,6 @@ setShowMenu(true);
 
 
 }
-
-
-
-
 
 function startFromMenu(){
 
@@ -579,6 +853,7 @@ setMessage(
 getFrenzyName(level)
 
 );
+
 
 
 
@@ -667,6 +942,7 @@ frenzyTimerRef.current.push(timer);
 
 
 
+
 function checkFrenzyTime(
 
 seconds:number
@@ -716,17 +992,17 @@ triggerFrenzy(4);
 
 
 
+
+
 function startGame(){
 
-if (musicRef.current) {
-  musicRef.current
-    .play()
-    .catch(() => {});
-}
+
+playMusic();
 
 
 
 clearFrenzyTimers();
+
 
 
 
@@ -763,6 +1039,7 @@ pieceRef.current=first;
 
 
 setNextPiece(next);
+
 
 
 
@@ -823,10 +1100,12 @@ setFrenzyActive(false);
 
 
 
+
 setHighScoreEligible(false);
 
 
 setHighScoreSubmitted(false);
+
 
 
 
@@ -838,11 +1117,15 @@ setClearing(new Set());
 
 
 
+
 setShowScore(false);
+
 
 setShowHelp(false);
 
+
 setShowHighScores(false);
+
 
 
 
@@ -852,6 +1135,7 @@ setPaused(false);
 
 
 setGameOver(false);
+
 
 
 
@@ -1072,6 +1356,7 @@ return;
 
 
 
+
 let working =
 
 placePiece(
@@ -1106,6 +1391,7 @@ return;
 
 
 }
+
 
 
 
@@ -1259,6 +1545,7 @@ setBoard(working);
 
 
 
+
 let points=
 
 getDropScore();
@@ -1379,6 +1666,8 @@ setMessage(
 
 
 
+
+
 window.setTimeout(()=>{
 
 setRevealBurst(false);
@@ -1468,6 +1757,7 @@ if(isGameOver(working)){
 endGame();
 
 
+
 return;
 
 
@@ -1483,6 +1773,8 @@ spawnNext();
 
 
 }
+
+
 
 
 
@@ -1516,6 +1808,8 @@ gameOverRef.current
 return;
 
 }
+
+
 
 
 
@@ -1562,6 +1856,8 @@ lockCurrentPiece();
 
 
 }
+
+
 
 
 
@@ -1632,13 +1928,17 @@ saveHighScore(entry)
 
 .then(()=>{
 
-  setHighScoreSubmitted(true);
+
+setHighScoreSubmitted(true);
+
 
 });
 
 
 
 }
+
+
 
 
 
@@ -1728,6 +2028,7 @@ lastDrop.current=now;
 
 
 
+
 frame=
 
 requestAnimationFrame(
@@ -1769,6 +2070,8 @@ cancelAnimationFrame(frame);
 
 
 },[time]);
+
+
 
 
 
@@ -1853,6 +2156,8 @@ clearFrenzyTimers();
 
 
 
+
+
 function handleKeyDown(
 
 e:KeyboardEvent
@@ -1904,7 +2209,6 @@ return;
 
 
 }
-
 
 
 
@@ -1988,6 +2292,8 @@ setSoftDrop(true);
 
 }
 
+
+
 function handleKeyUp(
 
 e:KeyboardEvent
@@ -2009,12 +2315,6 @@ setSoftDrop(false);
 
 
 }
-
-
-
-
-
-
 
 useEffect(()=>{
 
@@ -2083,6 +2383,7 @@ handleKeyUp
 
 
 
+
 return (
 
 
@@ -2091,11 +2392,17 @@ return (
 
 
 
+
+
 board={board}
 
 
 
+
+
 piece={piece}
+
+
 
 
 
@@ -2105,7 +2412,11 @@ nextPiece={nextPiece}
 
 
 
+
+
 score={score}
+
+
 
 
 
@@ -2113,7 +2424,11 @@ time={time}
 
 
 
+
+
 reveal={reveal}
+
+
 
 
 
@@ -2123,7 +2438,11 @@ currentForm={currentForm}
 
 
 
+
+
 flash={flash}
+
+
 
 
 
@@ -2133,11 +2452,17 @@ clearing={clearing}
 
 
 
+
+
 paused={paused}
 
 
 
+
+
 gameOver={gameOver}
+
+
 
 
 
@@ -2147,7 +2472,11 @@ message={message}
 
 
 
+
+
 frenzy={frenzy}
+
+
 
 
 
@@ -2155,11 +2484,17 @@ frenzyActive={frenzyActive}
 
 
 
+
+
 shake={shake}
 
 
 
+
+
 formRevealed={formRevealed}
+
+
 
 
 
@@ -2169,11 +2504,17 @@ revealBurst={revealBurst}
 
 
 
+
+
 qualifies={highScoreEligible}
 
 
 
+
+
 submitted={highScoreSubmitted}
+
+
 
 
 
@@ -2183,9 +2524,15 @@ onSubmitScore={submitHighScore}
 
 
 
+
+
 onPause={()=>{
 
+
+
 setPaused(true);
+
+
 
 }}
 
@@ -2193,7 +2540,11 @@ setPaused(true);
 
 
 
+
+
 onRestart={startGame}
+
+
 
 
 
@@ -2206,6 +2557,7 @@ onResume={()=>{
 setPaused(false);
 
 
+
 pausedRef.current=false;
 
 
@@ -2216,11 +2568,19 @@ pausedRef.current=false;
 
 
 
+
+
 onMoveLeft={()=>{
+
+
 
 move(-1);
 
+
+
 }}
+
+
 
 
 
@@ -2228,9 +2588,15 @@ move(-1);
 
 onMoveRight={()=>{
 
+
+
 move(1);
 
+
+
 }}
+
+
 
 
 
@@ -2242,11 +2608,19 @@ onRotate={rotate}
 
 
 
+
+
 onDropStart={()=>{
+
+
 
 setSoftDrop(true);
 
+
+
 }}
+
+
 
 
 
@@ -2254,9 +2628,15 @@ setSoftDrop(true);
 
 onDropEnd={()=>{
 
+
+
 setSoftDrop(false);
 
+
+
 }}
+
+
 
 
 
@@ -2268,7 +2648,10 @@ onScore={()=>{
 
 setPaused(true);
 
+
+
 pausedRef.current=true;
+
 
 
 setShowScore(true);
@@ -2281,13 +2664,18 @@ setShowScore(true);
 
 
 
+
+
 onHelp={()=>{
 
 
 
 setPaused(true);
 
+
+
 pausedRef.current=true;
+
 
 
 setShowHelp(true);
@@ -2300,13 +2688,18 @@ setShowHelp(true);
 
 
 
+
+
 onHighScores={()=>{
 
 
 
 setPaused(true);
 
+
+
 pausedRef.current=true;
+
 
 
 setShowHighScores(true);
@@ -2319,7 +2712,11 @@ setShowHighScores(true);
 
 
 
+
+
 onExit={exitGame}
+
+
 
 
 
@@ -2331,7 +2728,11 @@ showMenu={showMenu}
 
 
 
+
+
 onStart={startFromMenu}
+
+
 
 
 
@@ -2341,11 +2742,17 @@ showScore={showScore}
 
 
 
+
+
 showHelp={showHelp}
 
 
 
+
+
 showHighScores={showHighScores}
+
+
 
 
 
@@ -2365,6 +2772,8 @@ setShowScore(false);
 
 
 
+
+
 closeHelp={()=>{
 
 
@@ -2379,6 +2788,8 @@ setShowHelp(false);
 
 
 
+
+
 closeHighScores={()=>{
 
 
@@ -2388,6 +2799,8 @@ setShowHighScores(false);
 
 
 }}
+
+
 
 
 
