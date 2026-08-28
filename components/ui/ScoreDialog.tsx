@@ -120,6 +120,7 @@ title==="HIGH SCORES"
 
 
 
+
 function Controls(){
 
 
@@ -241,6 +242,7 @@ OBJECTIVE
 );
 
 }
+
 
 
 
@@ -740,7 +742,11 @@ flex:1,
 
 minHeight:0,
 
-overflowY:"auto",
+height:"100%",
+
+overflowY:"scroll",
+
+WebkitOverflowScrolling:"touch",
 
 paddingRight:6,
 
