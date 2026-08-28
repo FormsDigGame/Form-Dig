@@ -47,12 +47,20 @@ const colors:Color[]=[
 
 export function createBoard():Cell[][]{
 
+
   return Array.from(
+
     {length:ROWS},
+
     ()=>Array(COLS).fill(null)
+
   );
 
+
 }
+
+
+
 
 
 
@@ -60,29 +68,83 @@ export function createBoard():Cell[][]{
 
 export function createPiece():Piece{
 
+
   return {
 
-    x:Math.floor(COLS/2),
 
-    y:1,
+    /*
+      x/y is the first blob position.
 
-    rotation:0,
+      The second blob rotates around
+      the first blob.
+
+      0:
+
+      first
+      second
+
+
+      1:
+
+      first second
+
+
+      2:
+
+      second
+      first
+
+
+      3:
+
+      second first
+
+    */
+
+
+    x:
+
+      Math.floor(COLS/2),
+
+
+    y:
+
+      1,
+
+
+    rotation:
+
+      0,
+
 
     first:
+
       colors[
+
         Math.floor(
+
           Math.random()*colors.length
+
         )
+
       ],
 
+
     second:
+
       colors[
+
         Math.floor(
+
           Math.random()*colors.length
+
         )
+
       ]
 
+
   };
+
 
 }
 
@@ -90,67 +152,117 @@ export function createPiece():Piece{
 
 
 
-function getOffset(
+
+
+
+function getSecondOffset(
+
   rotation:number
-){
+
+):number[]{
+
 
   switch(rotation % 4){
+
+
+    case 0:
+
+      return [
+
+        0,
+
+        1
+
+      ];
+
+
 
     case 1:
 
       return [
-        [0,0],
-        [1,0]
+
+        1,
+
+        0
+
       ];
+
 
 
     case 2:
 
       return [
-        [0,0],
-        [0,-1]
+
+        0,
+
+        -1
+
       ];
 
-
-    case 3:
-
-      return [
-        [0,0],
-        [-1,0]
-      ];
 
 
     default:
 
       return [
-        [0,0],
-        [0,1]
+
+        -1,
+
+        0
+
       ];
+
 
   }
 
+
 }
 
-
-
-
-
 export function getPositions(
+
   piece:Piece
+
 ):number[][]{
 
 
-  return getOffset(piece.rotation)
-  .map(([ox,oy])=>[
+  const [
 
-    piece.x+ox,
+    ox,
 
-    piece.y+oy
+    oy
 
-  ]);
+  ] = getSecondOffset(
 
+    piece.rotation
+
+  );
+
+
+
+  return [
+
+    [
+
+      piece.x,
+
+      piece.y
+
+    ],
+
+    [
+
+      piece.x + ox,
+
+      piece.y + oy
+
+    ]
+
+  ];
 
 }
+
+
+
+
 
 
 
@@ -162,7 +274,7 @@ export function canPlace(
 
   piece:Piece
 
-){
+):boolean{
 
 
   return getPositions(piece)
@@ -173,9 +285,13 @@ export function canPlace(
     return (
 
       x>=0 &&
+
       x<COLS &&
+
       y>=0 &&
+
       y<ROWS &&
+
       board[y][x]===null
 
     );
@@ -185,6 +301,10 @@ export function canPlace(
 
 
 }
+
+
+
+
 
 
 
@@ -205,15 +325,24 @@ export function movePiece(
 
   const moved:Piece={
 
+
     ...piece,
 
+
     x:
+
       piece.x+dx,
 
+
     y:
+
       piece.y+dy
 
+
+
   };
+
+
 
 
 
@@ -236,6 +365,14 @@ export function movePiece(
 
 }
 
+
+
+
+
+
+
+
+
 export function rotatePiece(
 
   board:Cell[][],
@@ -245,107 +382,105 @@ export function rotatePiece(
 ):Piece|null{
 
 
-  const directions=[
+  const rotated:Piece={
 
-    1,
 
-    -1
+    ...piece,
+
+
+    rotation:
+
+      (
+
+        piece.rotation+1
+
+      ) % 4
+
+
+
+  };
+
+
+
+
+
+  const kicks=[
+
+
+    [0,0],
+
+
+    [-1,0],
+
+
+    [1,0],
+
+
+    [0,-1],
+
+
+    [0,1]
+
+
 
   ];
 
-
-
-  const attempts:Piece[]=[];
-
-
-
-  directions.forEach(direction=>{
-
-
-    const rotated:Piece={
-
-      ...piece,
-
-      rotation:
-        (
-          piece.rotation+
-          direction+
-          4
-        ) % 4
-
-    };
-
-
-
-    attempts.push(rotated);
-
-
-
-    attempts.push({
-
-      ...rotated,
-
-      x:
-        rotated.x-1
-
-    });
-
-
-
-    attempts.push({
-
-      ...rotated,
-
-      x:
-        rotated.x+1
-
-    });
-
-
-
-    attempts.push({
-
-      ...rotated,
-
-      y:
-        rotated.y-1
-
-    });
-
-
-
-    attempts.push({
-
-      ...rotated,
-
-      y:
-        rotated.y+1
-
-    });
-
-
-
-  });
 
 
 
 
 
   for(
-    const attempt of attempts
+
+    const [kx,ky] of kicks
+
   ){
 
 
+
+    const attempt:Piece={
+
+
+      ...rotated,
+
+
+      x:
+
+        rotated.x+kx,
+
+
+      y:
+
+        rotated.y+ky
+
+
+
+    };
+
+
+
+
+
     if(
+
       canPlace(
+
         board,
+
         attempt
+
       )
+
     ){
+
+
 
       return attempt;
 
+
+
     }
+
 
 
   }
@@ -353,9 +488,67 @@ export function rotatePiece(
 
 
 
+
+
+  /*
+    If trapped vertically,
+    allow a 180 degree flip
+    around the first blob.
+  */
+
+
+
+  const flip:Piece={
+
+
+    ...piece,
+
+
+    rotation:
+
+      (
+
+        piece.rotation+2
+
+      ) % 4
+
+
+
+  };
+
+
+
+
+
+  if(
+
+    canPlace(
+
+      board,
+
+      flip
+
+    )
+
+  ){
+
+
+
+    return flip;
+
+
+
+  }
+
+
+
+
+
   return null;
 
+
 }
+
 
 
 
@@ -372,7 +565,7 @@ export function placePiece(
 ):Cell[][]{
 
 
-  const next =
+  const next=
 
     board.map(
 
@@ -382,42 +575,48 @@ export function placePiece(
 
 
 
-  getPositions(piece)
+  const positions=
 
-  .forEach(([x,y],index)=>{
-
-
-    if(
-
-      x>=0 &&
-      x<COLS &&
-      y>=0 &&
-      y<ROWS
-
-    ){
+    getPositions(piece);
 
 
-      next[y][x]=
-
-        index===0
-
-        ?
-
-        piece.first
-
-        :
-
-        piece.second;
 
 
-    }
+
+  next[
+
+    positions[0][1]
+
+  ][
+
+    positions[0][0]
+
+  ]=
+
+    piece.first;
 
 
-  });
+
+
+
+  next[
+
+    positions[1][1]
+
+  ][
+
+    positions[1][0]
+
+  ]=
+
+    piece.second;
+
+
 
 
 
   return next;
+
 
 }
 
@@ -427,13 +626,363 @@ export function placePiece(
 
 
 
-/*
-  Puyo style cluster gravity.
 
-  Connected blocks stay together.
-  Unsupported connected groups fall
-  as a shape and stop on support.
+
+function floodGroup(
+
+  board:Cell[][],
+
+  startX:number,
+
+  startY:number,
+
+  visited:Set<string>
+
+){
+
+  const color=
+
+    board[startY][startX];
+
+
+  const group:string[]=[];
+
+
+  const queue=[
+
+    `${startX},${startY}`
+
+  ];
+
+
+  visited.add(
+
+    `${startX},${startY}`
+
+  );
+
+
+  while(queue.length){
+
+
+    const current=
+
+      queue.shift()!;
+
+
+    group.push(current);
+
+
+    const [
+
+      x,
+
+      y
+
+    ]=
+
+      current
+
+      .split(",")
+
+      .map(Number);
+
+
+
+
+    [
+
+      [x+1,y],
+
+      [x-1,y],
+
+      [x,y+1],
+
+      [x,y-1]
+
+    ]
+
+    .forEach(([nx,ny])=>{
+
+
+      const key=
+
+        `${nx},${ny}`;
+
+
+      if(
+
+        nx>=0 &&
+
+        nx<COLS &&
+
+        ny>=0 &&
+
+        ny<ROWS &&
+
+        board[ny][nx]===color &&
+
+        !visited.has(key)
+
+      ){
+
+
+        visited.add(key);
+
+
+        queue.push(key);
+
+
+      }
+
+
+    });
+
+
+  }
+
+
+  return group;
+
+}
+
+export function findGroups(
+
+  board:Cell[][]
+
+):Set<string>[]{
+
+
+  const groups:Set<string>[]=[];
+
+
+  const visited=
+
+    new Set<string>();
+
+
+
+
+
+  for(
+
+    let y=0;
+
+    y<ROWS;
+
+    y++
+
+  ){
+
+
+
+    for(
+
+      let x=0;
+
+      x<COLS;
+
+      x++
+
+    ){
+
+
+
+      if(
+
+        board[y][x]!==null &&
+
+        !visited.has(`${x},${y}`)
+
+      ){
+
+
+
+        const group=
+
+          floodGroup(
+
+            board,
+
+            x,
+
+            y,
+
+            visited
+
+          );
+
+
+
+
+
+        if(
+
+          group.length>=4
+
+        ){
+
+
+
+          groups.push(
+
+            new Set(group)
+
+          );
+
+
+
+        }
+
+
+
+      }
+
+
+
+    }
+
+
+
+  }
+
+
+
+
+
+  return groups;
+
+
+}
+
+
+
+
+
+
+
+
+export function clearGroups(
+
+  board:Cell[][],
+
+  groups:Set<string>[]
+
+){
+
+
+
+  const next=
+
+    board.map(
+
+      row=>[...row]
+
+    );
+
+
+
+  let removed=0;
+
+
+
+
+
+
+
+  groups.forEach(group=>{
+
+
+
+    group.forEach(cell=>{
+
+
+
+      const [
+
+        x,
+
+        y
+
+      ]=
+
+        cell
+
+        .split(",")
+
+        .map(Number);
+
+
+
+
+
+      if(
+
+        next[y][x]!==null
+
+      ){
+
+
+
+        next[y][x]=null;
+
+
+
+        removed++;
+
+
+
+      }
+
+
+
+    });
+
+
+
+  });
+
+
+
+
+
+
+
+  return {
+
+
+    board:next,
+
+
+    removed
+
+
+  };
+
+
+}
+
+
+
+
+
+
+
+
+/*
+  Gravity:
+
+  A connected cluster only falls when
+  it has no support beneath it.
+
+  Supports:
+
+  - bottom of board
+  - another block below it
+  - another block in the same connected cluster
+
 */
+
 
 
 
@@ -469,7 +1018,10 @@ function getCluster(
 
 
 
+
+
   while(queue.length){
+
 
 
     const current=
@@ -477,7 +1029,10 @@ function getCluster(
       queue.shift()!;
 
 
+
     cluster.push(current);
+
+
 
 
 
@@ -490,8 +1045,12 @@ function getCluster(
     ]=
 
       current
+
       .split(",")
+
       .map(Number);
+
+
 
 
 
@@ -510,40 +1069,389 @@ function getCluster(
     .forEach(([nx,ny])=>{
 
 
+
       const key=
 
         `${nx},${ny}`;
 
 
 
+
+
       if(
 
         nx>=0 &&
+
         nx<COLS &&
+
         ny>=0 &&
+
         ny<ROWS &&
-        board[ny][nx] &&
+
+        board[ny][nx]!==null &&
+
         !visited.has(key)
 
       ){
 
+
+
         visited.add(key);
 
+
+
         queue.push(key);
+
+
 
       }
 
 
+
     });
+
 
 
   }
 
 
 
+
+
   return cluster;
 
+
 }
+
+
+
+
+
+
+
+
+function hasSupport(
+
+  board:Cell[][],
+
+  cluster:string[]
+
+):boolean{
+
+
+  const set=
+
+    new Set(cluster);
+
+
+
+
+
+  for(
+
+    const cell of cluster
+
+  ){
+
+
+
+    const [
+
+      x,
+
+      y
+
+    ]=
+
+      cell
+
+      .split(",")
+
+      .map(Number);
+
+
+
+
+
+    if(
+
+      y===ROWS-1
+
+    ){
+
+      return true;
+
+    }
+
+
+
+
+
+    const below=
+
+      `${x},${y+1}`;
+
+
+
+
+
+    if(
+
+      !set.has(below) &&
+
+      board[y+1][x]!==null
+
+    ){
+
+
+
+      return true;
+
+
+    }
+
+
+
+  }
+
+
+
+
+
+  return false;
+
+
+}
+
+function getFallDistance(
+
+  board:Cell[][],
+
+  cluster:string[]
+
+):number{
+
+
+  const set=
+
+    new Set(cluster);
+
+
+  let distance=
+
+    ROWS;
+
+
+
+
+
+  for(
+
+    const cell of cluster
+
+  ){
+
+
+
+    const [
+
+      x,
+
+      y
+
+    ]=
+
+      cell
+
+      .split(",")
+
+      .map(Number);
+
+
+
+
+
+    let drop=0;
+
+
+
+
+
+    while(true){
+
+
+
+      const nextY=
+
+        y+drop+1;
+
+
+
+
+
+      if(
+
+        nextY>=ROWS
+
+      ){
+
+        break;
+
+      }
+
+
+
+
+
+      const below=
+
+        `${x},${nextY}`;
+
+
+
+
+
+      if(
+
+        !set.has(below) &&
+
+        board[nextY][x]!==null
+
+      ){
+
+        break;
+
+      }
+
+
+
+
+
+      drop++;
+
+
+
+    }
+
+
+
+
+
+    distance=
+
+      Math.min(
+
+        distance,
+
+        drop
+
+      );
+
+
+
+  }
+
+
+
+
+
+  return distance;
+
+
+}
+
+
+
+
+
+
+
+
+
+function moveCluster(
+
+  board:Cell[][],
+
+  cluster:string[],
+
+  distance:number
+
+){
+
+
+  const blocks=
+
+    cluster.map(cell=>{
+
+
+      const [
+
+        x,
+
+        y
+
+      ]=
+
+        cell
+
+        .split(",")
+
+        .map(Number);
+
+
+
+
+
+      return {
+
+
+        x,
+
+        y,
+
+
+        value:
+
+          board[y][x]
+
+
+      };
+
+
+    });
+
+
+
+
+
+  blocks.forEach(block=>{
+
+
+    board[block.y][block.x]=null;
+
+
+  });
+
+
+
+
+
+  blocks.forEach(block=>{
+
+
+    board[block.y+distance][block.x]=
+
+      block.value;
+
+
+  });
+
+
+}
+
+
+
+
 
 
 
@@ -556,9 +1464,13 @@ export function applyGravity(
 ):Cell[][]{
 
 
-  let current=
+  const next=
 
-    board.map(row=>[...row]);
+    board.map(
+
+      row=>[...row]
+
+    );
 
 
 
@@ -566,10 +1478,14 @@ export function applyGravity(
 
 
 
+
+
   while(moved){
 
 
+
     moved=false;
+
 
 
     const visited=
@@ -577,37 +1493,52 @@ export function applyGravity(
       new Set<string>();
 
 
+
     const clusters:string[][]=[];
 
 
 
+
+
     for(
+
       let y=0;
+
       y<ROWS;
+
       y++
+
     ){
 
+
+
       for(
+
         let x=0;
+
         x<COLS;
+
         x++
+
       ){
+
 
 
         if(
 
-          current[y][x] &&
+          next[y][x]!==null &&
 
           !visited.has(`${x},${y}`)
 
         ){
 
 
+
           clusters.push(
 
             getCluster(
 
-              current,
+              next,
 
               x,
 
@@ -620,406 +1551,102 @@ export function applyGravity(
           );
 
 
+
         }
 
 
+
       }
+
+
 
     }
 
 
 
-    for(
-      const cluster of clusters
-    ){
 
 
-      let canFall=true;
 
 
-
-      const cells=
-
-        cluster.map(cell=>
-
-          cell
-          .split(",")
-          .map(Number)
-
-        );
-
-
-
-      for(
-        const [x,y] of cells
-      ){
-
-
-        const belowY=y+1;
-
-
-
-        if(
-          belowY>=ROWS
-        ){
-
-          canFall=false;
-
-          break;
-
-        }
-
-
-
-        const belowKey=
-
-          `${x},${belowY}`;
-
-
-
-        if(
-
-          !cluster.includes(belowKey) &&
-
-          current[belowY][x]!==null
-
-        ){
-
-          canFall=false;
-
-          break;
-
-        }
-
-
-      }
-
-
-
-      if(canFall){
-
-
-        const moving=
-
-          cells.map(([x,y])=>({
-
-            x,
-
-            y,
-
-            value:
-
-              current[y][x]
-
-          }));
-
-
-        moving.forEach(block=>{
-
-          current[block.y][block.x]=null;
-
-        });
-
-
-
-        moving.forEach(block=>{
-
-          current[block.y+1][block.x]=
-
-            block.value;
-
-        });
-
-
-
-        moved=true;
-
-
-      }
-
-
-    }
-
-
-  }
-
-
-
-  return current;
-
-}
-
-function floodGroup(
-
-  board:Cell[][],
-
-  startX:number,
-
-  startY:number,
-
-  visited:Set<string>
-
-){
-
-
-  const color=
-
-    board[startY][startX];
-
-
-  const group:string[]=[];
-
-
-  const queue=[
-
-    `${startX},${startY}`
-
-  ];
-
-
-
-  visited.add(
-
-    `${startX},${startY}`
-
-  );
-
-
-
-  while(queue.length){
-
-
-    const current=
-
-      queue.shift()!;
-
-
-    group.push(current);
-
-
-
-    const [
-
-      x,
-
-      y
-
-    ]=
-
-      current
-      .split(",")
-      .map(Number);
-
-
-
-    [
-
-      [x+1,y],
-
-      [x-1,y],
-
-      [x,y+1],
-
-      [x,y-1]
-
-    ]
-
-    .forEach(([nx,ny])=>{
-
-
-      const key=
-
-        `${nx},${ny}`;
+    clusters.forEach(cluster=>{
 
 
 
       if(
 
-        nx>=0 &&
-        nx<COLS &&
-        ny>=0 &&
-        ny<ROWS &&
-        board[ny][nx]===color &&
-        !visited.has(key)
+        !hasSupport(
 
-      ){
+          next,
 
-        visited.add(key);
+          cluster
 
-        queue.push(key);
-
-      }
-
-
-    });
-
-
-  }
-
-
-
-  return group;
-
-}
-
-
-
-
-
-export function findGroups(
-
-  board:Cell[][]
-
-){
-
-
-  const groups:Set<string>[]=[];
-
-
-  const visited=
-
-    new Set<string>();
-
-
-
-  for(
-    let y=0;
-    y<ROWS;
-    y++
-  ){
-
-
-    for(
-      let x=0;
-      x<COLS;
-      x++
-    ){
-
-
-      if(
-
-        board[y][x] &&
-
-        !visited.has(`${x},${y}`)
+        )
 
       ){
 
 
-        const group=
 
-          floodGroup(
+        const distance=
 
-            board,
+          getFallDistance(
 
-            x,
+            next,
 
-            y,
-
-            visited
+            cluster
 
           );
 
 
 
+
+
         if(
-          group.length>=4
+
+          distance>0
+
         ){
 
-          groups.push(
 
-            new Set(group)
+
+          moveCluster(
+
+            next,
+
+            cluster,
+
+            distance
 
           );
 
+
+
+          moved=true;
+
+
+
         }
+
 
 
       }
 
 
-    }
+
+    });
+
 
 
   }
 
 
 
-  return groups;
+
+
+  return next;
+
 
 }
 
-
-
-
-
-
-
-export function clearGroups(
-
-  board:Cell[][],
-
-  groups:Set<string>[]
-
-){
-
-
-  const next=
-
-    board.map(row=>[...row]);
-
-
-
-  let removed=0;
-
-
-
-  groups.forEach(group=>{
-
-
-    group.forEach(cell=>{
-
-
-      const [
-
-        x,
-
-        y
-
-      ]=
-
-        cell
-        .split(",")
-        .map(Number);
-
-
-
-      if(
-        next[y][x]
-      ){
-
-        next[y][x]=null;
-
-        removed++;
-
-      }
-
-
-    });
-
-
-  });
-
-
-
-  return {
-
-    board:next,
-
-    removed
-
-  };
-
-}
 
 
 
@@ -1035,40 +1662,57 @@ export function isGameOver(
 ):boolean{
 
 
-  const checkRows=3;
-
-
-
   for(
+
     let y=0;
-    y<checkRows;
+
+    y<3;
+
     y++
+
   ){
 
 
+
     for(
+
       let x=0;
-      x<board[y].length;
+
+      x<COLS;
+
       x++
+
     ){
 
 
+
       if(
+
         board[y][x]!==null
+
       ){
 
+
+
         return true;
+
+
 
       }
 
 
+
     }
+
 
 
   }
 
 
 
+
+
   return false;
+
 
 }
