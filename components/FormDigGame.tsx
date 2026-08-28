@@ -306,28 +306,24 @@ useRef<HTMLAudioElement | null>(null);
 
 
 useEffect(() => {
+  const audio = new Audio("/audio/theme.mp3");
 
-const audio = new Audio("/audio/theme.mp3");
+  audio.loop = true;
+  audio.volume = 0.35;
 
-audio.loop = true;
+  audio.addEventListener("ended", () => {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  });
 
-audio.volume = 0.35;
+  musicRef.current = audio;
 
-musicRef.current = audio;
-
-
-return()=>{
-
-audio.pause();
-
-audio.currentTime = 0;
-
-musicRef.current = null;
-
-};
-
-
-},[]);
+  return () => {
+    audio.pause();
+    audio.currentTime = 0;
+    musicRef.current = null;
+  };
+}, []);
 
 
 
