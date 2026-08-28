@@ -1,5 +1,9 @@
 "use client";
 
+import React, {
+  useRef
+} from "react";
+
 
 type Props = {
 
@@ -14,7 +18,6 @@ type Props = {
   onDropEnd:()=>void;
 
 };
-
 
 
 
@@ -34,177 +37,170 @@ export default function MobileControls({
 
 
 
-return (
+const startX = useRef(0);
 
-<div
+const startY = useRef(0);
 
-style={{
+const moved = useRef(false);
 
-display:"flex",
 
-flexDirection:"column",
 
-alignItems:"center",
+function handleStart(
 
-gap:18,
+e:React.TouchEvent
 
-marginTop:25,
+){
 
-touchAction:"none",
+const touch=e.touches[0];
 
-userSelect:"none"
+startX.current=touch.clientX;
 
-}}
+startY.current=touch.clientY;
 
->
+moved.current=false;
 
+}
 
 
 
-<button
+function handleEnd(
 
-onClick={onRotate}
+e:React.TouchEvent
 
-style={buttonStyle}
+){
 
->
+const touch=e.changedTouches[0];
 
-↻
 
-<br/>
 
-ROTATE
+const deltaX =
 
-</button>
+touch.clientX - startX.current;
 
 
 
+const deltaY =
 
+touch.clientY - startY.current;
 
 
-<div
 
-style={{
+const distance =
 
-display:"flex",
+Math.sqrt(
 
-gap:40
+deltaX * deltaX +
 
-}}
-
->
-
-
-
-<button
-
-onClick={onLeft}
-
-style={buttonStyle}
-
->
-
-←
-
-<br/>
-
-LEFT
-
-</button>
-
-
-
-
-<button
-
-onClick={onRight}
-
-style={buttonStyle}
-
->
-
-→
-
-<br/>
-
-RIGHT
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-<button
-
-onPointerDown={onDropStart}
-
-onPointerUp={onDropEnd}
-
-onPointerLeave={onDropEnd}
-
-style={{
-
-...buttonStyle,
-
-width:110
-
-}}
-
->
-
-↓
-
-<br/>
-
-DROP
-
-</button>
-
-
-
-
-
-</div>
+deltaY * deltaY
 
 );
+
+
+
+if(distance < 20){
+
+onRotate();
+
+return;
+
+}
+
+
+
+if(Math.abs(deltaY) > Math.abs(deltaX)){
+
+
+if(deltaY > 30){
+
+onDropStart();
+
+
+setTimeout(()=>{
+
+onDropEnd();
+
+},250);
+
+}
+
+
+return;
+
+}
+
+
+
+if(deltaX > 30){
+
+onRight();
+
+return;
+
+}
+
+
+
+if(deltaX < -30){
+
+onLeft();
+
+return;
+
+}
 
 
 }
 
 
 
+return (
+
+<div
+
+className="mobile-touch-zone"
+
+onTouchStart={handleStart}
+
+onTouchEnd={handleEnd}
+
+>
+
+
+<style jsx>{`
+
+.mobile-touch-zone {
+
+position:absolute;
+
+inset:0;
+
+z-index:30;
+
+touch-action:none;
+
+user-select:none;
+
+}
 
 
 
-const buttonStyle:React.CSSProperties={
+@media(min-width:901px){
 
-width:90,
+.mobile-touch-zone {
 
-height:70,
+display:none;
 
-fontSize:18,
+}
 
-fontWeight:"bold",
+}
 
-background:"#111",
 
-color:"#fff",
 
-border:"3px solid #444",
+`}</style>
 
-borderRadius:12,
 
-cursor:"pointer",
+</div>
 
-touchAction:"none",
+);
 
-fontFamily:"monospace"
-
-};
+}

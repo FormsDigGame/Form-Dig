@@ -41,59 +41,16 @@ return (
 
 <div
 
-style={{
-
-width:"100%",
-
-display:"flex",
-
-flexDirection:"column",
-
-gap:8
-
-}}
+className="game-panels"
 
 >
-
 
 
 {
 
 frenzy>0 &&
 
-<div
-
-style={{
-
-background:
-
-frenzy>=4
-
-?
-
-"#ff1744"
-
-:
-
-"#ffea00",
-
-color:"#000",
-
-border:"2px solid #fff",
-
-borderRadius:8,
-
-padding:"5px",
-
-fontWeight:"900",
-
-textAlign:"center",
-
-fontSize:15
-
-}}
-
->
+<div className="frenzy-box">
 
 {
 
@@ -115,55 +72,10 @@ frenzy>=4
 
 
 
+<div className="form-box">
 
 
-<div
-
-style={{
-
-background:"#101010",
-
-border:"2px solid",
-
-borderColor:
-
-formRevealed
-
-?
-
-"#00e676"
-
-:
-
-"#555",
-
-borderRadius:8,
-
-padding:8,
-
-fontFamily:"monospace",
-
-textAlign:"center"
-
-}}
-
->
-
-
-
-<div
-
-style={{
-
-fontSize:10,
-
-letterSpacing:1,
-
-color:"#888"
-
-}}
-
->
+<div className="panel-label">
 
 FORM DATABASE
 
@@ -171,31 +83,19 @@ FORM DATABASE
 
 
 
-<div
-
-style={{
-
-fontSize:18,
-
-fontWeight:"900",
-
-marginTop:3,
-
-color:
+<div className={
 
 formRevealed
 
 ?
 
-"#00e676"
+"form-name unlocked"
 
 :
 
-"#ffea00"
+"form-name"
 
-}}
-
->
+}>
 
 {
 
@@ -215,53 +115,17 @@ currentForm.name
 
 
 
-<div
+<div className="category-row">
 
-style={{
 
-display:"flex",
-
-justifyContent:"center",
-
-alignItems:"center",
-
-gap:5,
-
-marginTop:3
-
-}}
-
->
-
-<span
-
-style={{
-
-fontSize:10,
-
-color:"#777"
-
-}}
-
->
+<span>
 
 CATEGORY
 
 </span>
 
 
-
-<strong
-
-style={{
-
-fontSize:13,
-
-color:"#fff"
-
-}}
-
->
+<strong>
 
 {
 
@@ -280,9 +144,7 @@ currentForm.category
 </strong>
 
 
-
 </div>
-
 
 
 
@@ -290,25 +152,7 @@ currentForm.category
 
 !formRevealed &&
 
-<div
-
-style={{
-
-marginTop:5,
-
-fontSize:11,
-
-padding:4,
-
-background:"#222",
-
-border:"1px dashed #666",
-
-color:"#aaa"
-
-}}
-
->
+<div className="locked">
 
 🔒 REDACTED FORM DATA
 
@@ -318,26 +162,11 @@ color:"#aaa"
 
 
 
-
 {
 
 formRevealed &&
 
-<div
-
-style={{
-
-marginTop:4,
-
-fontSize:11,
-
-fontWeight:"900",
-
-color:"#00e676"
-
-}}
-
->
+<div className="verified">
 
 ✓ FORM VERIFIED
 
@@ -363,6 +192,227 @@ formRevealed={formRevealed}
 
 />
 
+
+
+<style jsx>{`
+
+.game-panels {
+
+width:100%;
+
+display:flex;
+
+flex-direction:column;
+
+gap:8px;
+
+}
+
+
+
+.frenzy-box {
+
+background:#ffea00;
+
+color:#000;
+
+border:2px solid #fff;
+
+border-radius:8px;
+
+padding:5px;
+
+font-weight:900;
+
+text-align:center;
+
+font-size:15px;
+
+}
+
+
+
+.form-box {
+
+background:#101010;
+
+border:2px solid #555;
+
+border-radius:8px;
+
+padding:8px;
+
+font-family:monospace;
+
+text-align:center;
+
+}
+
+
+
+.panel-label {
+
+font-size:10px;
+
+letter-spacing:2px;
+
+color:#888;
+
+}
+
+
+
+.form-name {
+
+font-size:18px;
+
+font-weight:900;
+
+margin-top:4px;
+
+color:#ffea00;
+
+}
+
+
+
+.form-name.unlocked {
+
+color:#00e676;
+
+}
+
+
+
+.category-row {
+
+display:flex;
+
+justify-content:center;
+
+gap:8px;
+
+margin-top:5px;
+
+font-size:12px;
+
+}
+
+
+
+.category-row span {
+
+color:#777;
+
+}
+
+
+
+.category-row strong {
+
+color:#fff;
+
+}
+
+
+
+.locked {
+
+margin-top:6px;
+
+padding:5px;
+
+background:#222;
+
+border:1px dashed #666;
+
+font-size:11px;
+
+color:#aaa;
+
+}
+
+
+
+.verified {
+
+margin-top:5px;
+
+color:#00e676;
+
+font-size:12px;
+
+font-weight:900;
+
+}
+
+
+
+@media(max-width:900px){
+
+
+.game-panels {
+
+max-width:380px;
+
+margin:auto;
+
+}
+
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.game-panels {
+
+gap:4px;
+
+}
+
+
+
+.form-box {
+
+padding:5px;
+
+}
+
+
+
+.form-name {
+
+font-size:15px;
+
+}
+
+
+
+.category-row {
+
+font-size:10px;
+
+}
+
+
+
+.frenzy-box {
+
+font-size:12px;
+
+}
+
+
+
+}
+
+
+
+`}</style>
 
 
 </div>

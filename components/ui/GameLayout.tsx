@@ -273,8 +273,6 @@ FORM//DROP
 
 </h1>
 
-
-
 <TopBar
 
 onPause={onPause}
@@ -296,6 +294,27 @@ onHighScores={onHighScores}
 
 
 <div className="play-column">
+
+
+
+<div className="mobile-form">
+
+<GamePanels
+
+reveal={reveal}
+
+currentForm={currentForm}
+
+formRevealed={formRevealed}
+
+frenzy={frenzy}
+
+/>
+
+</div>
+
+
+
 
 
 <div className="top-game-info">
@@ -352,6 +371,11 @@ TIME
 
 
 
+
+
+<div className="board-wrap">
+
+
 <GameBoard
 
 board={board}
@@ -364,20 +388,6 @@ clearing={clearing}
 
 />
 
-{
-message &&
-
-<div className="game-message">
-
-{message}
-
-</div>
-
-}
-
-
-
-<div className="mobile-controls">
 
 
 <MobileControls
@@ -399,7 +409,23 @@ onDropEnd={onDropEnd}
 
 
 
+
+
+{
+message &&
+
+<div className="game-message">
+
+{message}
+
 </div>
+
+}
+
+
+
+</div>
+
 
 
 
@@ -542,8 +568,6 @@ onClose={closeHighScores}
 
 }
 
-
-
 <style jsx>{`
 
 .game-container {
@@ -621,6 +645,16 @@ display:flex;
 flex-direction:column;
 
 align-items:center;
+
+position:relative;
+
+}
+
+
+
+.mobile-form {
+
+display:none;
 
 }
 
@@ -706,6 +740,14 @@ justify-content:center;
 
 
 
+.board-wrap {
+
+position:relative;
+
+}
+
+
+
 .form-column {
 
 width:270px;
@@ -713,8 +755,6 @@ width:270px;
 display:flex;
 
 flex-direction:column;
-
-margin-top:0;
 
 }
 
@@ -735,18 +775,6 @@ min-height:22px;
 }
 
 
-
-.mobile-controls {
-
-width:100%;
-
-display:flex;
-
-justify-content:center;
-
-margin-top:6px;
-
-}
 
 .frenzy-banner {
 
@@ -820,13 +848,11 @@ animation:revealExplosion .8s ease;
 
 @keyframes frenzyPulse {
 
-
 0% {
 
 transform:scale(1);
 
 }
-
 
 50% {
 
@@ -834,22 +860,17 @@ transform:scale(1.12);
 
 }
 
-
 100% {
 
 transform:scale(1);
 
 }
 
-
 }
 
 
 
-
-
 @keyframes revealExplosion {
-
 
 0% {
 
@@ -859,7 +880,6 @@ opacity:0;
 
 }
 
-
 40% {
 
 transform:scale(1.2);
@@ -868,7 +888,6 @@ opacity:1;
 
 }
 
-
 100% {
 
 transform:scale(1);
@@ -876,7 +895,6 @@ transform:scale(1);
 opacity:0;
 
 }
-
 
 }
 
@@ -893,7 +911,7 @@ flex-direction:column;
 
 align-items:center;
 
-gap:8px;
+gap:4px;
 
 }
 
@@ -901,11 +919,21 @@ gap:8px;
 
 .form-column {
 
+display:none;
+
+}
+
+
+
+.mobile-form {
+
+display:block;
+
 width:100%;
 
-max-width:380px;
+max-width:320px;
 
-order:2;
+order:1;
 
 }
 
@@ -915,15 +943,7 @@ order:2;
 
 width:100%;
 
-order:1;
-
-}
-
-
-
-.top-game-info {
-
-grid-template-columns:80px 110px 80px;
+order:2;
 
 }
 
@@ -938,7 +958,13 @@ grid-template-columns:80px 110px 80px;
 
 .game-container {
 
-padding:4px;
+height:100dvh;
+
+min-height:0;
+
+overflow:hidden;
+
+padding:3px;
 
 }
 
@@ -946,7 +972,9 @@ padding:4px;
 
 h1 {
 
-font-size:38px;
+font-size:30px;
+
+margin-bottom:4px;
 
 }
 
@@ -954,9 +982,11 @@ font-size:38px;
 
 .top-game-info {
 
-grid-template-columns:70px 100px 70px;
+grid-template-columns:65px 90px 65px;
 
-gap:6px;
+gap:4px;
+
+margin-bottom:4px;
 
 }
 
@@ -964,7 +994,7 @@ gap:6px;
 
 .stat-box {
 
-height:44px;
+height:38px;
 
 }
 
@@ -972,7 +1002,7 @@ height:44px;
 
 .stat-box strong {
 
-font-size:14px;
+font-size:12px;
 
 }
 
@@ -980,25 +1010,29 @@ font-size:14px;
 
 .next-box {
 
-width:100px;
+width:90px;
 
-height:65px;
-
-}
-
-
-
-.form-column {
-
-max-width:350px;
+height:55px;
 
 }
 
 
 
-.mobile-controls {
+.board-wrap {
 
-margin-top:10px;
+transform:scale(.72);
+
+transform-origin:top center;
+
+margin-bottom:-95px;
+
+}
+
+
+
+.mobile-form {
+
+max-width:280px;
 
 }
 

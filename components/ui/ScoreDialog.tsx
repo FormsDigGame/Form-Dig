@@ -121,7 +121,7 @@ return (
 
 <h3 style={sectionTitleStyle}>
 
-HOW TO PLAY
+MOBILE CONTROLS
 
 </h3>
 
@@ -131,19 +131,13 @@ HOW TO PLAY
 
 <div style={labelStyle}>
 
-MOVE
-
-</div>
-
-<div>
-
-← → Arrow Keys
+SWIPE LEFT / RIGHT
 
 </div>
 
 <p>
 
-Move the falling FORM left and right.
+Swipe anywhere on the game area to move the falling FORM.
 
 </p>
 
@@ -155,19 +149,13 @@ Move the falling FORM left and right.
 
 <div style={labelStyle}>
 
-ROTATE
-
-</div>
-
-<div>
-
-↑ Arrow Key
+TAP
 
 </div>
 
 <p>
 
-Rotate pieces into the best position.
+Tap the screen to rotate the current FORM.
 
 </p>
 
@@ -179,19 +167,13 @@ Rotate pieces into the best position.
 
 <div style={labelStyle}>
 
-DROP
-
-</div>
-
-<div>
-
-↓ Arrow Key
+SWIPE DOWN
 
 </div>
 
 <p>
 
-Drop pieces faster when ready.
+Swipe down to activate a soft drop and move faster.
 
 </p>
 
@@ -203,19 +185,13 @@ Drop pieces faster when ready.
 
 <div style={labelStyle}>
 
-PAUSE
-
-</div>
-
-<div>
-
-ESC
+DESKTOP
 
 </div>
 
 <p>
 
-Pause or resume the game.
+Arrow keys move and rotate. ESC pauses the game.
 
 </p>
 
@@ -235,9 +211,9 @@ OBJECTIVE
 
 <li>Create matching groups.</li>
 
-<li>Clear blocks to reveal hidden FORMS.</li>
+<li>Clear blocks to uncover hidden FORMS.</li>
 
-<li>Build chains for higher scores.</li>
+<li>Build chains for bigger scores.</li>
 
 <li>Trigger FORM FRENZY events.</li>
 
@@ -281,7 +257,7 @@ BLOCK CLEARS
 
 <p>
 
-Larger groups create bigger point rewards.
+Larger groups create larger rewards.
 
 </p>
 
@@ -299,7 +275,7 @@ CHAIN BONUS
 
 <p>
 
-Keep clearing groups to increase your multiplier.
+Keep clearing without stopping to build your multiplier.
 
 </p>
 
@@ -317,7 +293,7 @@ FORM REVEAL
 
 <p>
 
-Discover hidden FORMS by clearing the board.
+Clear enough blocks to decrypt hidden FORMS.
 
 </p>
 
@@ -335,7 +311,7 @@ FORM FRENZY
 
 <p>
 
-Special moments with faster action and bigger rewards.
+Special arcade moments with faster action and higher rewards.
 
 </p>
 
@@ -353,11 +329,11 @@ ARCADE TIPS
 
 <ul style={listStyle}>
 
-<li>Plan ahead using the next piece.</li>
+<li>Watch the next piece.</li>
 
-<li>Create long chains whenever possible.</li>
+<li>Plan your chains.</li>
 
-<li>Save risky moves for big rewards.</li>
+<li>Take risks for bigger rewards.</li>
 
 </ul>
 
@@ -379,17 +355,17 @@ const [scores,setScores] = React.useState<HighScoreEntry[]>([]);
 React.useEffect(()=>{
 
 
-  getHighScores()
+getHighScores()
 
-  .then(
+.then(
 
-    result=>{
+result=>{
 
-      setScores(result);
+setScores(result);
 
-    }
+}
 
-  );
+);
 
 
 },[]);
@@ -522,7 +498,7 @@ justifyContent:"center",
 
 alignItems:"center",
 
-padding:"15px",
+padding:"10px",
 
 fontFamily:"monospace"
 
@@ -546,9 +522,9 @@ border:"3px solid #ffea00",
 
 borderRadius:12,
 
-padding:18,
+padding:16,
 
-boxShadow:"0 0 40px #000, 0 0 20px #2979ff"
+boxShadow:"0 0 40px #000,0 0 20px #2979ff"
 
 };
 
@@ -594,7 +570,7 @@ textAlign:"center",
 
 color:"#ffea00",
 
-margin:"0 0 18px",
+margin:"0 0 15px",
 
 textShadow:"3px 3px #ff1744"
 
@@ -606,9 +582,9 @@ const contentStyle:React.CSSProperties={
 
 fontFamily:"monospace",
 
-fontSize:15,
+fontSize:14,
 
-lineHeight:1.5,
+lineHeight:1.45,
 
 color:"#fff"
 
@@ -622,7 +598,7 @@ display:"flex",
 
 flexDirection:"column",
 
-gap:10
+gap:8
 
 };
 
@@ -630,9 +606,9 @@ gap:10
 
 const sectionTitleStyle:React.CSSProperties={
 
-margin:"12px 0 4px",
+margin:"10px 0 4px",
 
-fontSize:18,
+fontSize:17,
 
 fontWeight:"900",
 
@@ -652,7 +628,7 @@ border:"1px solid #2979ff",
 
 borderRadius:8,
 
-padding:10,
+padding:10
 
 };
 
@@ -678,7 +654,7 @@ margin:"6px 0 12px",
 
 paddingLeft:20,
 
-lineHeight:1.6
+lineHeight:1.5
 
 };
 
@@ -694,7 +670,7 @@ borderRadius:8,
 
 padding:10,
 
-marginBottom:10,
+marginBottom:10
 
 };
 

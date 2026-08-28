@@ -116,14 +116,11 @@ formRevealed
 
 
 
-
-
 {
 
 form && !formRevealed &&
 
 <div className="pixel-cover">
-
 
 {
 
@@ -167,7 +164,6 @@ removed
 
 }
 
-
 </div>
 
 }
@@ -209,7 +205,6 @@ NO FORM DATA
 </div>
 
 }
-
 
 
 </div>
@@ -266,17 +261,20 @@ formRevealed && form &&
 
 <div className="category-box">
 
+
 <div className="category-label">
 
 CATEGORY
 
 </div>
 
+
 <div className="category-value">
 
 {form.category}
 
 </div>
+
 
 </div>
 
@@ -580,11 +578,13 @@ color:#00e676;
 
 
 
+
+
 @media(max-width:900px){
 
 .image-box {
 
-height:230px;
+height:180px;
 
 }
 
@@ -596,13 +596,39 @@ height:230px;
 
 .image-box {
 
-height:200px;
+height:135px;
 
 }
 
+
+
+.panel-title {
+
+font-size:10px;
+
+}
+
+
+
 .reveal-status {
 
-font-size:16px;
+font-size:14px;
+
+}
+
+
+
+.progress {
+
+height:7px;
+
+}
+
+
+
+.category-value {
+
+font-size:14px;
 
 }
 
