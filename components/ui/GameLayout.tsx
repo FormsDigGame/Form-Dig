@@ -212,6 +212,9 @@ return (
 <div className="game-container">
 
 
+{
+!modalOpen &&
+
 <MobileControls
 
 onLeft={onMoveLeft}
@@ -225,6 +228,8 @@ onDropStart={onDropStart}
 onDropEnd={onDropEnd}
 
 />
+
+}
 
 
 
