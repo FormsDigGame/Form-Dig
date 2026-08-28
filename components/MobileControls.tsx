@@ -36,20 +36,22 @@ export default function MobileControls({
 }:Props){
 
 
-
 const startX = useRef(0);
 
 const startY = useRef(0);
 
 const moved = useRef(false);
 
+const dropping = useRef(false);
 
 
-function handleStart(
 
-e:React.TouchEvent
+function start(e:React.TouchEvent){
 
-){
+e.preventDefault();
+
+e.stopPropagation();
+
 
 const touch=e.touches[0];
 
@@ -63,43 +65,25 @@ moved.current=false;
 
 
 
-function handleEnd(
+function move(e:React.TouchEvent){
 
-e:React.TouchEvent
+e.preventDefault();
 
-){
-
-const touch=e.changedTouches[0];
+e.stopPropagation();
 
 
-
-const deltaX =
-
-touch.clientX - startX.current;
+const touch=e.touches[0];
 
 
+const x = touch.clientX - startX.current;
 
-const deltaY =
-
-touch.clientY - startY.current;
+const y = touch.clientY - startY.current;
 
 
 
-const distance =
+// prevent repeated triggers
 
-Math.sqrt(
-
-deltaX * deltaX +
-
-deltaY * deltaY
-
-);
-
-
-
-if(distance < 20){
-
-onRotate();
+if(moved.current){
 
 return;
 
@@ -107,44 +91,71 @@ return;
 
 
 
-if(Math.abs(deltaY) > Math.abs(deltaX)){
+// horizontal movement
+
+if(Math.abs(x) > Math.abs(y) && Math.abs(x) > 15){
 
 
-if(deltaY > 30){
-
-onDropStart();
+moved.current=true;
 
 
-setTimeout(()=>{
-
-onDropEnd();
-
-},250);
-
-}
-
-
-return;
-
-}
-
-
-
-if(deltaX > 30){
+if(x > 0){
 
 onRight();
 
+}
+
+else{
+
+onLeft();
+
+}
+
+
 return;
 
 }
 
 
 
-if(deltaX < -30){
+// downward soft drop
 
-onLeft();
+if(y > 20){
+
+moved.current=true;
+
+dropping.current=true;
+
+onDropStart();
+
+}
+
+}
+
+
+
+function end(e:React.TouchEvent){
+
+e.preventDefault();
+
+e.stopPropagation();
+
+
+if(dropping.current){
+
+onDropEnd();
+
+dropping.current=false;
 
 return;
+
+}
+
+
+
+if(!moved.current){
+
+onRotate();
 
 }
 
@@ -159,9 +170,11 @@ return (
 
 className="mobile-touch-zone"
 
-onTouchStart={handleStart}
+onTouchStart={start}
 
-onTouchEnd={handleEnd}
+onTouchMove={move}
+
+onTouchEnd={end}
 
 >
 
@@ -174,11 +187,15 @@ position:absolute;
 
 inset:0;
 
-z-index:30;
+z-index:50;
 
 touch-action:none;
 
 user-select:none;
+
+-webkit-user-select:none;
+
+-webkit-touch-callout:none;
 
 }
 
@@ -193,8 +210,6 @@ display:none;
 }
 
 }
-
-
 
 `}</style>
 
