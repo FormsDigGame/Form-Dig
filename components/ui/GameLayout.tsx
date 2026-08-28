@@ -110,6 +110,8 @@ type Props = {
 
 
 
+
+
 export default function GameLayout({
 
   board,
@@ -318,11 +320,15 @@ onHighScores={onHighScores}
 <div className="stat-box">
 
 <span>
+
 SCORE
+
 </span>
 
 <strong>
+
 {score}
+
 </strong>
 
 </div>
@@ -344,18 +350,21 @@ nextPiece={nextPiece}
 <div className="stat-box">
 
 <span>
+
 TIME
+
 </span>
 
 <strong>
+
 {time}s
+
 </strong>
 
 </div>
 
 
 </div>
-
 
 
 <GameBoard
@@ -369,6 +378,7 @@ flash={flash}
 clearing={clearing}
 
 />
+
 
 
 {
@@ -860,7 +870,6 @@ opacity:0;
 }
 
 
-
 @media(max-width:900px){
 
 .game-layout {
@@ -869,13 +878,13 @@ flex-direction:row;
 
 align-items:flex-start;
 
-justify-content:flex-start;
+justify-content:center;
 
 gap:8px;
 
 width:100%;
 
-padding-left:10px;
+padding-left:0;
 
 }
 
@@ -888,6 +897,10 @@ order:1;
 width:auto;
 
 flex-shrink:0;
+
+transform:none;
+
+margin-right:0;
 
 }
 
@@ -907,11 +920,15 @@ display:flex;
 
 order:2;
 
-width:180px;
+width:150px;
 
-max-width:180px;
+max-width:150px;
+
+min-width:150px;
 
 flex-shrink:0;
+
+margin-left:6px;
 
 }
 
@@ -939,17 +956,21 @@ height:60px;
 
 
 
+
+
 @media(max-width:600px){
 
 .game-container {
 
-height:100dvh;
+min-height:100dvh;
 
-min-height:0;
+height:auto;
 
 padding:3px;
 
-overflow:hidden;
+overflow-x:hidden;
+
+overflow-y:auto;
 
 }
 
@@ -975,15 +996,15 @@ flex-direction:row;
 
 align-items:flex-start;
 
-justify-content:flex-start;
+justify-content:center;
 
-gap:5px;
+gap:4px;
 
 width:100%;
 
 max-width:none;
 
-padding-left:8px;
+padding-left:0;
 
 }
 
@@ -995,11 +1016,9 @@ width:auto;
 
 min-width:0;
 
-transform:scale(.72);
+transform:none;
 
-transform-origin:top left;
-
-margin-right:-25%;
+margin-right:0;
 
 }
 
@@ -1007,11 +1026,13 @@ margin-right:-25%;
 
 .mobile-form {
 
-width:135px;
+width:120px;
 
-max-width:135px;
+max-width:120px;
 
-min-width:135px;
+min-width:120px;
+
+margin-left:4px;
 
 }
 
@@ -1073,9 +1094,9 @@ min-height:16px;
 
 }
 
-
-
 }
+
+
 
 
 
@@ -1093,35 +1114,23 @@ font-size:26px;
 
 gap:2px;
 
-padding-left:4px;
-
-}
-
-
-
-.play-column {
-
-transform:scale(.64);
-
-margin-right:-30%;
-
 }
 
 
 
 .mobile-form {
 
-width:120px;
+width:105px;
 
-max-width:120px;
+max-width:105px;
 
-min-width:120px;
-
-}
+min-width:105px;
 
 }
 
 
+
+}
 
 `}</style>
 
@@ -1131,3 +1140,4 @@ min-width:120px;
 );
 
 }
+
