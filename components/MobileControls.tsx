@@ -1,6 +1,7 @@
 "use client";
 
 import React, {
+  useEffect,
   useRef
 } from "react";
 
@@ -48,13 +49,18 @@ const moved=useRef(false);
 
 const dropping=useRef(false);
 
+const active=useRef(false);
 
 
-function isInteractiveElement(
+
+useEffect(()=>{
+
+
+const isInteractive=(
 
 target:EventTarget|null
 
-){
+)=>{
 
 if(!(target instanceof HTMLElement)){
 
@@ -73,24 +79,33 @@ target.closest(
 
 );
 
-}
+};
 
 
 
-function touchStart(
+const handleStart=(
 
-e:React.TouchEvent
+e:TouchEvent
 
-){
+)=>{
 
-if(isInteractiveElement(e.target)){
+
+if(isInteractive(e.target)){
+
+active.current=false;
 
 return;
 
 }
 
 
-e.preventDefault();
+if(e.touches.length!==1){
+
+active.current=false;
+
+return;
+
+}
 
 
 const touch=e.touches[0];
@@ -108,17 +123,28 @@ moved.current=false;
 
 dropping.current=false;
 
+active.current=true;
+
+
+};
+
+
+
+const handleMove=(
+
+e:TouchEvent
+
+)=>{
+
+
+if(!active.current){
+
+return;
+
 }
 
 
-
-function touchMove(
-
-e:React.TouchEvent
-
-){
-
-if(isInteractiveElement(e.target)){
+if(e.touches.length!==1){
 
 return;
 
@@ -146,15 +172,19 @@ if(
 
 deltaY>30 &&
 
-Math.abs(deltaY)>Math.abs(deltaX) &&
-
-!dropping.current
+Math.abs(deltaY)>Math.abs(deltaX)
 
 ){
+
+
+if(!dropping.current){
 
 dropping.current=true;
 
 onDropStart();
+
+}
+
 
 return;
 
@@ -175,8 +205,8 @@ const movement=
 touch.clientX-lastX.current;
 
 
+const stepDistance=18;
 
-const stepDistance=22;
 
 
 if(Math.abs(movement)>=stepDistance){
@@ -191,7 +221,9 @@ Math.abs(movement)/stepDistance
 );
 
 
+
 if(movement>0){
+
 
 for(
 
@@ -207,9 +239,11 @@ onRight();
 
 }
 
+
 }
 
 else{
+
 
 for(
 
@@ -225,7 +259,9 @@ onLeft();
 
 }
 
+
 }
+
 
 
 lastX.current=touch.clientX;
@@ -234,24 +270,23 @@ moved.current=true;
 
 }
 
-}
+
+};
 
 
 
-function touchEnd(
+const handleEnd=(
 
-e:React.TouchEvent
+e:TouchEvent
 
-){
+)=>{
 
-if(isInteractiveElement(e.target)){
+
+if(!active.current){
 
 return;
 
 }
-
-
-e.preventDefault();
 
 
 if(dropping.current){
@@ -260,9 +295,25 @@ onDropEnd();
 
 dropping.current=false;
 
+active.current=false;
+
 return;
 
 }
+
+
+
+const touch=e.changedTouches[0];
+
+
+if(!touch){
+
+active.current=false;
+
+return;
+
+}
+
 
 
 const duration=
@@ -270,26 +321,23 @@ const duration=
 Date.now()-startTime.current;
 
 
-const totalX=
+const distanceX=
 
 Math.abs(
 
-e.changedTouches[0].clientX-
-
-startX.current
+touch.clientX-startX.current
 
 );
 
 
-const totalY=
+const distanceY=
 
 Math.abs(
 
-e.changedTouches[0].clientY-
-
-startY.current
+touch.clientY-startY.current
 
 );
+
 
 
 if(
@@ -298,9 +346,9 @@ if(
 
 duration<300 &&
 
-totalX<15 &&
+distanceX<15 &&
 
-totalY<15
+distanceY<15
 
 ){
 
@@ -308,64 +356,134 @@ onRotate();
 
 }
 
-}
+
+
+active.current=false;
+
+};
 
 
 
-return (
-
-<div
-
-className="mobile-touch-layer"
-
-onTouchStart={touchStart}
-
-onTouchMove={touchMove}
-
-onTouchEnd={touchEnd}
-
->
+const handleCancel=()=>{
 
 
-<style jsx>{`
+if(dropping.current){
 
-.mobile-touch-layer {
-
-position:fixed;
-
-inset:0;
-
-z-index:10;
-
-touch-action:none;
-
-user-select:none;
-
--webkit-user-select:none;
-
--webkit-touch-callout:none;
-
-pointer-events:auto;
+onDropEnd();
 
 }
 
 
+dropping.current=false;
 
-@media(min-width:901px){
+active.current=false;
 
-.mobile-touch-layer{
-
-display:none;
-
-}
-
-}
-
-`}</style>
+};
 
 
-</div>
+
+window.addEventListener(
+
+"touchstart",
+
+handleStart,
+
+{passive:true}
 
 );
+
+
+window.addEventListener(
+
+"touchmove",
+
+handleMove,
+
+{passive:false}
+
+);
+
+
+window.addEventListener(
+
+"touchend",
+
+handleEnd,
+
+{passive:true}
+
+);
+
+
+window.addEventListener(
+
+"touchcancel",
+
+handleCancel,
+
+{passive:true}
+
+);
+
+
+
+return()=>{
+
+
+window.removeEventListener(
+
+"touchstart",
+
+handleStart
+
+);
+
+
+window.removeEventListener(
+
+"touchmove",
+
+handleMove
+
+);
+
+
+window.removeEventListener(
+
+"touchend",
+
+handleEnd
+
+);
+
+
+window.removeEventListener(
+
+"touchcancel",
+
+handleCancel
+
+);
+
+};
+
+
+},[
+
+onLeft,
+
+onRight,
+
+onRotate,
+
+onDropStart,
+
+onDropEnd
+
+]);
+
+
+
+return null;
 
 }
