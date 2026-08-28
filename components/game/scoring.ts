@@ -1,8 +1,8 @@
 // FORM//DROP scoring system
 // Balanced around:
-// - strong chains: ~30 seconds reveal
-// - average play: ~90 seconds reveal
-// - basic connections: ~2:30 reveal
+// - normal clears reveal around 90-120 seconds
+// - strong play reveals faster
+// - chains accelerate but are not required
 // - reveal is a milestone, not the end of the game
 
 
@@ -60,6 +60,8 @@ export function getClearScore(
 
 
 
+
+
 export function getRevealAmount(
 
   removed:number,
@@ -78,19 +80,22 @@ export function getRevealAmount(
 
   /*
   
-    Reveal balancing:
+    Reveal pacing:
 
-    Small clear:
-    ~1-3%
+    4 block clear:
+    ~5%
 
-    Medium clear:
-    ~5-8%
 
-    Strong chain:
-    ~10-20%
+    5 block clear:
+    ~6%
 
-    Large chain:
-    explosive reveal
+
+    Larger clears:
+    stronger reward
+
+
+    Chains:
+    bonus only, not required
 
   */
 
@@ -98,7 +103,7 @@ export function getRevealAmount(
 
   const blockReveal =
 
-    removed * 0.45;
+    removed * 1.25;
 
 
 
@@ -110,29 +115,25 @@ export function getRevealAmount(
 
       :
 
-      Math.pow(chain,1.35) * 1.8;
+      Math.pow(chain,1.25) * 3;
 
 
 
+  const matchBonus =
 
+    removed >= 12
 
-  const largeClearBonus =
+      ? 8
 
-    removed >= 10
+      :
+
+      removed >= 8
 
       ? 5
 
       :
 
-      removed >= 20
-
-      ? 10
-
-      :
-
       0;
-
-
 
 
 
@@ -144,7 +145,7 @@ export function getRevealAmount(
 
     chainBonus +
 
-    largeClearBonus
+    matchBonus
 
   );
 
@@ -219,6 +220,7 @@ export function getChainText(
 
 
 
+
 // Score multiplier during FORM FRENZY
 
 export function getFrenzyMultiplier(
@@ -267,16 +269,15 @@ export function getFrenzyMultiplier(
 
 
 
-// Gravity progression
-// No hard cap.
-// Final frenzy keeps accelerating.
 
+
+// Gravity progression
 
 export function getGravitySpeed(
 
-time:number,
+  time:number,
 
-frenzy:number
+  frenzy:number
 
 ){
 
@@ -346,7 +347,7 @@ frenzy:number
 
 export function getFrenzyName(
 
-frenzy:number
+  frenzy:number
 
 ){
 
