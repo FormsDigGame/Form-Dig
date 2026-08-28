@@ -15,20 +15,20 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://forms-drop.vercel.app/"),
 
-  title: "FORM//DROP",
+  title: "FORMS//DROP",
   description: "Neon arcade falling-block puzzle game",
 
   openGraph: {
-    title: "FORM//DROP",
+    title: "FORMS//DROP",
     description: "Neon arcade falling-block puzzle game",
     url: "https://forms-drop.vercel.app/",
-    siteName: "FORM//DROP",
+    siteName: "FORMS//DROP",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "FORM//DROP Neon Arcade Game",
+        alt: "FORMS//DROP Neon Arcade Game",
       },
     ],
     locale: "en_US",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "FORM//DROP",
+    title: "FORMS//DROP",
     description: "Neon arcade falling-block puzzle game",
     images: ["/opengraph-image.png"],
   },
