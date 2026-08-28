@@ -59,6 +59,7 @@ X
 
 <div style={contentStyle}>
 
+
 {
 
 title==="CONTROLS"
@@ -68,6 +69,7 @@ title==="CONTROLS"
 <Controls/>
 
 }
+
 
 
 
@@ -83,6 +85,7 @@ title==="SCORING"
 
 
 
+
 {
 
 title==="HIGH SCORES"
@@ -92,6 +95,7 @@ title==="HIGH SCORES"
 <HighScores/>
 
 }
+
 
 
 
@@ -106,6 +110,8 @@ title==="HIGH SCORES"
 );
 
 }
+
+
 
 
 
@@ -145,6 +151,7 @@ Swipe anywhere on the game area to move the falling FORM.
 
 
 
+
 <div style={cardStyle}>
 
 <div style={labelStyle}>
@@ -160,6 +167,7 @@ Tap the screen to rotate the current FORM.
 </p>
 
 </div>
+
 
 
 
@@ -181,6 +189,7 @@ Swipe down to activate a soft drop and move faster.
 
 
 
+
 <div style={cardStyle}>
 
 <div style={labelStyle}>
@@ -199,11 +208,13 @@ Arrow keys move and rotate. ESC pauses the game.
 
 
 
+
 <h3 style={sectionTitleStyle}>
 
 OBJECTIVE
 
 </h3>
+
 
 
 
@@ -221,11 +232,14 @@ OBJECTIVE
 
 
 
+
 </div>
 
 );
 
 }
+
+
 
 
 
@@ -265,6 +279,7 @@ Larger groups create larger rewards.
 
 
 
+
 <div style={cardStyle}>
 
 <div style={labelStyle}>
@@ -280,6 +295,7 @@ Keep clearing without stopping to build your multiplier.
 </p>
 
 </div>
+
 
 
 
@@ -301,6 +317,7 @@ Clear enough blocks to decrypt hidden FORMS.
 
 
 
+
 <div style={cardStyle}>
 
 <div style={labelStyle}>
@@ -319,11 +336,13 @@ Special arcade moments with faster action and higher rewards.
 
 
 
+
 <h3 style={sectionTitleStyle}>
 
 ARCADE TIPS
 
 </h3>
+
 
 
 
@@ -339,11 +358,18 @@ ARCADE TIPS
 
 
 
+
 </div>
 
 );
 
 }
+
+
+
+
+
+
 
 function HighScores(){
 
@@ -379,10 +405,14 @@ return (
 
 <h3 style={sectionTitleStyle}>
 
-TOP FORM RUNS
+TOP 50 FORM RUNS
 
 </h3>
 
+
+
+
+<div style={highScoreListStyle}>
 
 
 {
@@ -403,6 +433,7 @@ START PLAYING TO SET THE FIRST SCORE.
 
 
 :
+
 
 scores.map((entry,index)=>(
 
@@ -469,7 +500,11 @@ TIME: {entry.time}s
 
 ))
 
+
 }
+
+
+</div>
 
 
 </div>
@@ -477,6 +512,8 @@ TIME: {entry.time}s
 );
 
 }
+
+
 
 
 
@@ -512,9 +549,11 @@ position:"relative",
 
 width:"min(92vw,420px)",
 
+height:"85vh",
+
 maxHeight:"85vh",
 
-overflowY:"auto",
+overflow:"hidden",
 
 background:"#111",
 
@@ -524,7 +563,9 @@ borderRadius:12,
 
 padding:16,
 
-boxShadow:"0 0 40px #000,0 0 20px #2979ff"
+boxShadow:"0 0 40px #000,0 0 20px #2979ff",
+
+boxSizing:"border-box"
 
 };
 
@@ -586,7 +627,9 @@ fontSize:14,
 
 lineHeight:1.45,
 
-color:"#fff"
+color:"#fff",
+
+height:"calc(100% - 60px)"
 
 };
 
@@ -655,6 +698,20 @@ margin:"6px 0 12px",
 paddingLeft:20,
 
 lineHeight:1.5
+
+};
+
+
+
+const highScoreListStyle:React.CSSProperties={
+
+maxHeight:"65vh",
+
+overflowY:"auto",
+
+paddingRight:6,
+
+scrollbarWidth:"thin"
 
 };
 

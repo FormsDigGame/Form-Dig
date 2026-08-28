@@ -11,8 +11,6 @@ import {
 
 
 
-
-
 type Props = {
 
   score:number;
@@ -23,7 +21,6 @@ type Props = {
 
   submitted:boolean;
 
-
   onSubmitScore:(name:string)=>void;
 
   onRestart:()=>void;
@@ -33,8 +30,6 @@ type Props = {
   onExit:()=>void;
 
 };
-
-
 
 
 
@@ -65,9 +60,6 @@ export default function GameOverOverlay({
 
 
 const [name,setName] = useState("");
-
-
-
 
 
 
@@ -131,12 +123,14 @@ handleKey
 
 
 },[
+
 name,
+
 qualifies,
+
 submitted
+
 ]);
-
-
 
 
 
@@ -174,9 +168,6 @@ name.trim()
 
 
 
-
-
-
 return (
 
 <div
@@ -187,15 +178,11 @@ className="game-over-overlay"
 
 
 
-
-
 <div
 
 className="game-over-panel"
 
 >
-
-
 
 
 
@@ -222,8 +209,6 @@ FINAL SCORE
 {score}
 
 </div>
-
-
 
 
 
@@ -297,8 +282,6 @@ CATEGORY
 
 
 
-
-
 {
 
 qualifies && !submitted &&
@@ -363,21 +346,27 @@ SAVE SCORE
 
 
 
-
-
 {
 
 !qualifies &&
 
 <div className="no-score">
 
+<div>
+
 NO HIGH SCORE
 
 </div>
 
+<span>
+
+YOU NEED BETTER FORM
+
+</span>
+
+</div>
+
 }
-
-
 
 
 
@@ -396,8 +385,6 @@ submitted &&
 </div>
 
 }
-
-
 
 
 
@@ -453,19 +440,7 @@ EXIT
 
 
 
-
-
-
-
 </div>
-
-
-
-
-
-
-
-
 
 <style jsx>{`
 
@@ -715,7 +690,23 @@ margin-top:10px;
 
 font-weight:900;
 
+font-size:15px;
+
 color:#ff1744;
+
+}
+
+
+
+.no-score span{
+
+display:block;
+
+margin-top:4px;
+
+font-size:12px;
+
+color:#aaa;
 
 }
 
@@ -771,6 +762,8 @@ height:90px;
 
 }
 
+
+
 `}</style>
 
 
@@ -780,3 +773,4 @@ height:90px;
 );
 
 }
+

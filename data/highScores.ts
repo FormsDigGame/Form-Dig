@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabase";
 
 
+
 export type HighScoreEntry = {
 
   id:string;
@@ -25,6 +26,9 @@ export type HighScoreEntry = {
 
 
 
+
+
+
 function mapRowToEntry(
 
   row:any
@@ -34,23 +38,34 @@ function mapRowToEntry(
 
   return {
 
+
     id:String(row.id),
+
 
     name:row.name,
 
+
     score:row.score,
+
 
     time:row.time,
 
+
     formName:row.form_name,
+
 
     formCategory:row.form_category,
 
+
     formImage:row.form_image,
 
+
     createdAt:new Date(
+
       row.created_at
+
     ).getTime()
+
 
   };
 
@@ -63,7 +78,10 @@ function mapRowToEntry(
 
 
 
+
+
 export async function getHighScores():Promise<HighScoreEntry[]>{
+
 
 
   const {
@@ -90,7 +108,21 @@ export async function getHighScores():Promise<HighScoreEntry[]>{
 
     )
 
-    .limit(10);
+    .order(
+
+      "time",
+
+      {
+
+        ascending:true
+
+      }
+
+    )
+
+    .limit(50);
+
+
 
 
 
@@ -127,6 +159,8 @@ export async function getHighScores():Promise<HighScoreEntry[]>{
 
 
 
+
+
   return (
 
     data || []
@@ -141,6 +175,10 @@ export async function getHighScores():Promise<HighScoreEntry[]>{
 
 
 }
+
+
+
+
 
 
 
@@ -167,6 +205,7 @@ export async function saveHighScore(
     .from("high_scores")
 
     .insert({
+
 
 
       name:entry.name,
@@ -196,6 +235,7 @@ export async function saveHighScore(
         ).toISOString()
 
 
+
     });
 
 
@@ -203,7 +243,9 @@ export async function saveHighScore(
 
 
 
+
   if(error){
+
 
 
     console.error(
@@ -225,10 +267,150 @@ export async function saveHighScore(
     );
 
 
+
     return false;
 
 
   }
+
+    const {
+
+    data:scores,
+
+    error:loadError
+
+  } = await supabase
+
+    .from("high_scores")
+
+    .select("id")
+
+    .order(
+
+      "score",
+
+      {
+
+        ascending:false
+
+      }
+
+    )
+
+    .order(
+
+      "time",
+
+      {
+
+        ascending:true
+
+      }
+
+    );
+
+
+
+
+
+
+
+  if(loadError){
+
+
+    console.error(
+
+      "HIGH SCORE CLEANUP LOAD ERROR",
+
+      loadError
+
+    );
+
+
+    return true;
+
+
+  }
+
+
+
+
+
+
+
+  if(
+
+    scores &&
+
+    scores.length > 50
+
+  ){
+
+
+
+    const removeIds =
+
+      scores
+
+      .slice(50)
+
+      .map(
+
+        row=>row.id
+
+      );
+
+
+
+
+
+
+
+    const {
+
+      error:deleteError
+
+    } = await supabase
+
+      .from("high_scores")
+
+      .delete()
+
+      .in(
+
+        "id",
+
+        removeIds
+
+      );
+
+
+
+
+
+
+
+    if(deleteError){
+
+
+
+      console.error(
+
+        "HIGH SCORE CLEANUP DELETE ERROR",
+
+        deleteError
+
+      );
+
+
+    }
+
+
+  }
+
+
+
+
 
 
 
@@ -261,15 +443,31 @@ export async function qualifiesForHighScore(
 
 
 
+
+
   if(
 
-    scores.length < 10
+    scores.length < 50
 
   ){
 
+
     return true;
 
+
   }
+
+
+
+
+
+
+
+  const lowestTop50 =
+
+    scores[49];
+
+
 
 
 
@@ -279,11 +477,7 @@ export async function qualifiesForHighScore(
 
     score >
 
-    scores[
-
-      scores.length - 1
-
-    ].score
+    lowestTop50.score
 
   );
 
@@ -323,9 +517,11 @@ data:{
   return {
 
 
+
     id:
 
     crypto.randomUUID(),
+
 
 
     name:
@@ -333,9 +529,11 @@ data:{
     data.name.trim(),
 
 
+
     score:
 
     data.score,
+
 
 
     time:
@@ -343,9 +541,11 @@ data:{
     data.time,
 
 
+
     formName:
 
     data.formName,
+
 
 
     formCategory:
@@ -353,14 +553,17 @@ data:{
     data.formCategory,
 
 
+
     formImage:
 
     data.formImage,
 
 
+
     createdAt:
 
     Date.now()
+
 
 
   };
@@ -397,6 +600,7 @@ export async function clearHighScores(){
       0
 
     );
+
 
 
 
