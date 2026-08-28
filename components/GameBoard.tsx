@@ -24,6 +24,7 @@ type Props = {
 
 
 
+
 export default function GameBoard({
 
   board,
@@ -48,6 +49,7 @@ function getCellColor(
 
 
   let value =
+
     board[y][x];
 
 
@@ -56,6 +58,7 @@ function getCellColor(
 
 
     const positions =
+
       getPositions(current);
 
 
@@ -66,16 +69,26 @@ function getCellColor(
 
 
         if(
+
           px===x &&
+
           py===y
+
         ){
 
+
           value =
+
             index===0
+
             ?
+
             current.first
+
             :
+
             current.second;
+
 
         }
 
@@ -97,26 +110,41 @@ function getCellColor(
 
 
 
-
 return (
 
 <div
 
+className="game-board"
+
 style={{
+
 
 display:"grid",
 
+
 gridTemplateColumns:
-`repeat(${COLS},36px)`,
+
+`repeat(${COLS}, var(--cell))`,
+
+
 
 gridTemplateRows:
-`repeat(${ROWS},36px)`,
 
-gap:3,
+`repeat(${ROWS}, var(--cell))`,
 
-padding:12,
+
+
+gap:"var(--gap)",
+
+
+
+padding:"var(--padding)",
+
+
 
 background:"#050505",
+
+
 
 border:
 
@@ -129,6 +157,7 @@ flash
 :
 
 "3px solid #333",
+
 
 
 boxShadow:
@@ -144,7 +173,10 @@ flash
 "none",
 
 
+
 touchAction:"none"
+
+
 
 }}
 
@@ -163,19 +195,26 @@ row.map(
 (_,x)=>{
 
 
-
 const color =
+
 getCellColor(
-  x,
-  y
+
+x,
+
+y
+
 );
 
 
 
 const isClearing =
+
 clearing.has(
- `${x},${y}`
+
+`${x},${y}`
+
 );
+
 
 
 
@@ -188,19 +227,27 @@ key={`${x}-${y}`}
 
 style={{
 
-width:36,
 
-height:36,
+width:"var(--cell)",
+
+
+height:"var(--cell)",
+
 
 background:
+
 color || "#111",
 
 
+
 border:
+
 "1px solid #222",
 
 
+
 borderRadius:6,
+
 
 
 boxSizing:"border-box",
@@ -222,7 +269,10 @@ isClearing
 
 
 transition:
+
 "transform .15s"
+
+
 
 }}
 
@@ -244,10 +294,61 @@ transition:
 
 
 
-
 <style>
 
 {`
+
+.game-board {
+
+--cell:36px;
+
+--gap:3px;
+
+--padding:12px;
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.game-board {
+
+
+--cell:27px;
+
+--gap:2px;
+
+--padding:6px;
+
+
+}
+
+
+}
+
+
+
+@media(max-width:380px){
+
+
+.game-board {
+
+
+--cell:24px;
+
+--gap:2px;
+
+--padding:4px;
+
+
+}
+
+
+}
+
+
 
 @keyframes clearPulse {
 
@@ -256,43 +357,36 @@ transition:
 
 transform:scale(1);
 
-filter:
-brightness(1);
+filter:brightness(1);
 
-box-shadow:
-0 0 0 transparent;
+box-shadow:0 0 0 transparent;
 
 }
+
 
 
 50%{
 
-transform:
-scale(1.25);
+transform:scale(1.25);
 
-filter:
-brightness(2.5);
+filter:brightness(2.5);
 
-
-box-shadow:
-0 0 20px white;
+box-shadow:0 0 20px white;
 
 }
+
 
 
 100%{
 
-transform:
-scale(1);
+transform:scale(1);
 
-filter:
-brightness(1);
+filter:brightness(1);
 
-
-box-shadow:
-0 0 0 transparent;
+box-shadow:0 0 0 transparent;
 
 }
+
 
 
 }

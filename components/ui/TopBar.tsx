@@ -3,24 +3,17 @@
 import React from "react";
 
 
-
 type Props = {
 
+  onPause:()=>void;
 
-onPause:()=>void;
+  onRestart:()=>void;
 
+  onHelp:()=>void;
 
-onRestart:()=>void;
+  onScore:()=>void;
 
-
-onHelp:()=>void;
-
-
-onScore:()=>void;
-
-
-onHighScores:()=>void;
-
+  onHighScores:()=>void;
 
 };
 
@@ -28,25 +21,19 @@ onHighScores:()=>void;
 
 
 
-
-
-
 export default function TopBar({
 
-onPause,
+  onPause,
 
-onRestart,
+  onRestart,
 
-onHelp,
+  onHelp,
 
-onScore,
+  onScore,
 
-onHighScores
+  onHighScores
 
 }:Props){
-
-
-
 
 
 return (
@@ -55,30 +42,25 @@ return (
 
 style={{
 
-width:"100%",
+  width:"100%",
 
-maxWidth:1100,
+  maxWidth:1100,
 
-display:"flex",
+  display:"flex",
 
-justifyContent:"center",
+  justifyContent:"center",
 
-alignItems:"center",
+  alignItems:"center",
 
-gap:8,
+  gap:"clamp(3px,1vw,8px)",
 
-flexWrap:"wrap",
+  flexWrap:"nowrap",
 
-marginBottom:6
+  marginBottom:6,
 
 }}
 
 >
-
-
-
-
-
 
 
 <Button
@@ -90,10 +72,6 @@ onClick={onPause}
 />
 
 
-
-
-
-
 <Button
 
 label="RESTART"
@@ -101,11 +79,6 @@ label="RESTART"
 onClick={onRestart}
 
 />
-
-
-
-
-
 
 
 <Button
@@ -117,11 +90,6 @@ onClick={onScore}
 />
 
 
-
-
-
-
-
 <Button
 
 label="HELP"
@@ -129,11 +97,6 @@ label="HELP"
 onClick={onHelp}
 
 />
-
-
-
-
-
 
 
 <Button
@@ -145,17 +108,11 @@ onClick={onHighScores}
 />
 
 
-
-
-
-
-
 </div>
 
 );
 
 }
-
 
 
 
@@ -179,9 +136,6 @@ onClick:()=>void;
 }){
 
 
-
-
-
 return (
 
 <button
@@ -190,31 +144,45 @@ onClick={onClick}
 
 style={{
 
+
 background:"#111",
+
 
 color:"#ffea00",
 
+
 border:"2px solid #2979ff",
+
 
 borderRadius:8,
 
-padding:"8px 12px",
+
+padding:"clamp(4px,1vw,8px) clamp(6px,1.5vw,12px)",
+
 
 fontFamily:"monospace",
 
-fontSize:"clamp(12px,2.8vw,16px)",
+
+fontSize:"clamp(10px,2.2vw,16px)",
+
 
 fontWeight:"900",
 
-letterSpacing:1,
+
+letterSpacing:"clamp(.5px,.2vw,1px)",
+
 
 cursor:"pointer",
 
-minHeight:38,
+
+minHeight:"clamp(30px,7vw,38px)",
+
 
 whiteSpace:"nowrap",
 
+
 boxShadow:"0 0 8px rgba(41,121,255,.4)"
+
 
 }}
 
