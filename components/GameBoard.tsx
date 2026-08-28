@@ -114,6 +114,8 @@ return (
 
 <div
 
+className="game-board"
+
 style={{
 
 
@@ -123,21 +125,21 @@ display:"grid",
 
 gridTemplateColumns:
 
-`repeat(${COLS},36px)`,
+`repeat(${COLS}, var(--cell-size))`,
 
 
 
 gridTemplateRows:
 
-`repeat(${ROWS},36px)`,
+`repeat(${ROWS}, var(--cell-size))`,
 
 
 
-gap:3,
+gap:"var(--cell-gap)",
 
 
 
-padding:12,
+padding:"var(--board-padding)",
 
 
 
@@ -227,10 +229,10 @@ key={`${x}-${y}`}
 style={{
 
 
-width:36,
+width:"var(--cell-size)",
 
 
-height:36,
+height:"var(--cell-size)",
 
 
 
@@ -297,6 +299,58 @@ transition:
 <style>
 
 {`
+
+.game-board {
+
+--cell-size:36px;
+
+--cell-gap:3px;
+
+--board-padding:12px;
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.game-board {
+
+
+--cell-size:27px;
+
+--cell-gap:2px;
+
+--board-padding:6px;
+
+
+}
+
+
+}
+
+
+
+@media(max-width:380px){
+
+
+.game-board {
+
+
+--cell-size:24px;
+
+--cell-gap:2px;
+
+--board-padding:4px;
+
+
+}
+
+
+}
+
+
 
 @keyframes clearPulse {
 

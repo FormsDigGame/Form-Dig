@@ -366,7 +366,6 @@ TIME
 
 </div>
 
-
 <GameBoard
 
 board={board}
@@ -867,8 +866,9 @@ opacity:0;
 
 }
 
-}
 
+
+}
 
 @media(max-width:900px){
 
@@ -878,13 +878,17 @@ flex-direction:row;
 
 align-items:flex-start;
 
-justify-content:center;
+justify-content:flex-start;
 
-gap:8px;
+gap:6px;
 
 width:100%;
 
+max-width:100%;
+
 padding-left:0;
+
+box-sizing:border-box;
 
 }
 
@@ -896,7 +900,9 @@ order:1;
 
 width:auto;
 
-flex-shrink:0;
+max-width:calc(100vw - 140px);
+
+flex-shrink:1;
 
 transform:none;
 
@@ -920,15 +926,15 @@ display:flex;
 
 order:2;
 
-width:150px;
+width:120px;
 
-max-width:150px;
+max-width:120px;
 
-min-width:150px;
+min-width:120px;
 
 flex-shrink:0;
 
-margin-left:6px;
+margin-left:0;
 
 }
 
@@ -936,9 +942,9 @@ margin-left:6px;
 
 .top-game-info {
 
-grid-template-columns:70px 90px 70px;
+grid-template-columns:65px 85px 65px;
 
-gap:5px;
+gap:4px;
 
 }
 
@@ -946,9 +952,9 @@ gap:5px;
 
 .next-box {
 
-width:90px;
+width:85px;
 
-height:60px;
+height:58px;
 
 }
 
@@ -996,15 +1002,17 @@ flex-direction:row;
 
 align-items:flex-start;
 
-justify-content:center;
+justify-content:flex-start;
 
-gap:4px;
+gap:3px;
 
 width:100%;
 
-max-width:none;
+max-width:100%;
 
-padding-left:0;
+overflow:hidden;
+
+box-sizing:border-box;
 
 }
 
@@ -1013,6 +1021,8 @@ padding-left:0;
 .play-column {
 
 width:auto;
+
+max-width:calc(100vw - 120px);
 
 min-width:0;
 
@@ -1026,13 +1036,11 @@ margin-right:0;
 
 .mobile-form {
 
-width:120px;
+width:105px;
 
-max-width:120px;
+max-width:105px;
 
-min-width:120px;
-
-margin-left:4px;
+min-width:105px;
 
 }
 
@@ -1040,9 +1048,9 @@ margin-left:4px;
 
 .top-game-info {
 
-grid-template-columns:58px 78px 58px;
+grid-template-columns:50px 68px 50px;
 
-gap:3px;
+gap:2px;
 
 margin-bottom:4px;
 
@@ -1052,7 +1060,7 @@ margin-bottom:4px;
 
 .stat-box {
 
-height:36px;
+height:34px;
 
 border-radius:6px;
 
@@ -1078,9 +1086,9 @@ font-size:12px;
 
 .next-box {
 
-width:78px;
+width:68px;
 
-height:52px;
+height:46px;
 
 }
 
@@ -1118,13 +1126,21 @@ gap:2px;
 
 
 
+.play-column {
+
+max-width:calc(100vw - 108px);
+
+}
+
+
+
 .mobile-form {
 
-width:105px;
+width:95px;
 
-max-width:105px;
+max-width:95px;
 
-min-width:105px;
+min-width:95px;
 
 }
 
@@ -1140,4 +1156,3 @@ min-width:105px;
 );
 
 }
-
