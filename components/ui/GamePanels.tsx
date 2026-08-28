@@ -23,6 +23,7 @@ type Props = {
 
 
 
+
 export default function GamePanels({
 
   reveal,
@@ -72,14 +73,18 @@ frenzy>=4
 
 
 
+
+
 <div className="form-box">
 
 
 <div className="panel-label">
 
-FORM DATABASE
+FORMS DATABASE
 
 </div>
+
+
 
 
 
@@ -97,6 +102,7 @@ formRevealed
 
 }>
 
+
 {
 
 formRevealed && currentForm
@@ -111,7 +117,10 @@ currentForm.name
 
 }
 
+
 </div>
+
+
 
 
 
@@ -123,6 +132,7 @@ currentForm.name
 CATEGORY
 
 </span>
+
 
 
 <strong>
@@ -144,7 +154,10 @@ currentForm.category
 </strong>
 
 
+
 </div>
+
+
 
 
 
@@ -154,11 +167,13 @@ currentForm.category
 
 <div className="locked">
 
-🔒 REDACTED FORM DATA
+CLASSIFIED
 
 </div>
 
 }
+
+
 
 
 
@@ -194,6 +209,8 @@ formRevealed={formRevealed}
 
 
 
+
+
 <style jsx>{`
 
 .game-panels {
@@ -206,11 +223,21 @@ flex-direction:column;
 
 gap:8px;
 
+position:relative;
+
 }
 
 
 
 .frenzy-box {
+
+position:absolute;
+
+top:-42px;
+
+left:0;
+
+right:0;
 
 background:#ffea00;
 
@@ -227,6 +254,8 @@ font-weight:900;
 text-align:center;
 
 font-size:15px;
+
+z-index:5;
 
 }
 
@@ -272,6 +301,8 @@ margin-top:4px;
 
 color:#ffea00;
 
+letter-spacing:1px;
+
 }
 
 
@@ -289,6 +320,8 @@ color:#00e676;
 display:flex;
 
 justify-content:center;
+
+align-items:center;
 
 gap:8px;
 
@@ -312,23 +345,37 @@ color:#777;
 
 color:#fff;
 
+font-size:11px;
+
+max-width:100%;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
+
+white-space:nowrap;
+
 }
 
 
 
 .locked {
 
-margin-top:6px;
+margin-top:8px;
 
-padding:5px;
+padding:4px;
 
-background:#222;
+font-size:10px;
 
-border:1px dashed #666;
+font-weight:900;
 
-font-size:11px;
+letter-spacing:3px;
 
-color:#aaa;
+color:#ff1744;
+
+border-top:1px solid #444;
+
+text-align:center;
 
 }
 
@@ -348,6 +395,8 @@ font-weight:900;
 
 
 
+
+
 @media(max-width:900px){
 
 
@@ -360,8 +409,9 @@ margin:auto;
 }
 
 
-
 }
+
+
 
 
 
@@ -394,6 +444,16 @@ font-size:15px;
 
 .category-row {
 
+font-size:9px;
+
+gap:4px;
+
+}
+
+
+
+.category-row strong {
+
 font-size:10px;
 
 }
@@ -403,6 +463,18 @@ font-size:10px;
 .frenzy-box {
 
 font-size:12px;
+
+top:-34px;
+
+}
+
+
+
+.locked {
+
+font-size:9px;
+
+letter-spacing:2px;
 
 }
 
