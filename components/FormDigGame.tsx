@@ -2174,7 +2174,23 @@ if(
 
 "ArrowUp",
 
-" "
+" ",
+
+"a",
+
+"s",
+
+"d",
+
+"w",
+
+"A",
+
+"S",
+
+"D",
+
+"W"
 
 ].includes(e.key)
 
@@ -2226,61 +2242,46 @@ return;
 
 
 
-if(e.key==="ArrowLeft"){
-
-
-
-move(-1);
-
-
-
-}
-
-
-
-
-
-if(e.key==="ArrowRight"){
-
-
-
-move(1);
-
-
-
-}
-
-
-
+const key = e.key.toLowerCase();
 
 
 if(
-
-e.key==="ArrowUp" ||
-
-e.code==="Space"
-
+key==="arrowleft" ||
+key==="a"
 ){
 
-
-
-rotate();
-
-
+move(-1);
 
 }
 
 
+if(
+key==="arrowright" ||
+key==="d"
+){
+
+move(1);
+
+}
 
 
+if(
+key==="arrowup" ||
+key==="w" ||
+e.code==="Space"
+){
 
-if(e.key==="ArrowDown"){
+rotate();
+
+}
 
 
+if(
+key==="arrowdown" ||
+key==="s"
+){
 
 setSoftDrop(true);
-
-
 
 }
 
@@ -2296,19 +2297,17 @@ e:KeyboardEvent
 
 ){
 
+const key = e.key.toLowerCase();
 
 
-if(e.key==="ArrowDown"){
-
-
+if(
+key==="arrowdown" ||
+key==="s"
+){
 
 setSoftDrop(false);
 
-
-
 }
-
-
 
 }
 
