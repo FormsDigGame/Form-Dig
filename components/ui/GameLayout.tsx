@@ -869,11 +869,13 @@ flex-direction:row;
 
 align-items:flex-start;
 
-justify-content:center;
+justify-content:flex-start;
 
 gap:8px;
 
 width:100%;
+
+padding-left:10px;
 
 }
 
@@ -885,7 +887,7 @@ order:1;
 
 width:auto;
 
-flex-shrink:1;
+flex-shrink:0;
 
 }
 
@@ -973,13 +975,15 @@ flex-direction:row;
 
 align-items:flex-start;
 
-justify-content:center;
+justify-content:flex-start;
 
 gap:5px;
 
 width:100%;
 
 max-width:none;
+
+padding-left:8px;
 
 }
 
@@ -993,7 +997,7 @@ min-width:0;
 
 transform:scale(.72);
 
-transform-origin:top right;
+transform-origin:top left;
 
 margin-right:-25%;
 
@@ -1088,6 +1092,8 @@ font-size:26px;
 .game-layout {
 
 gap:2px;
+
+padding-left:4px;
 
 }
 
