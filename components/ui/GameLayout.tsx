@@ -225,6 +225,7 @@ onDropEnd={onDropEnd}
 />
 
 
+
 {
 showMenu &&
 
@@ -288,6 +289,7 @@ FORM//DROP
 </h1>
 
 
+
 <TopBar
 
 onPause={onPause}
@@ -303,21 +305,6 @@ onHighScores={onHighScores}
 />
 
 
-<div className="mobile-form">
-
-<GamePanels
-
-reveal={reveal}
-
-currentForm={currentForm}
-
-formRevealed={formRevealed}
-
-frenzy={frenzy}
-
-/>
-
-</div>
 
 <div className="game-layout">
 
@@ -401,8 +388,27 @@ message &&
 
 
 
-
 <div className="form-column desktop-form">
+
+
+<GamePanels
+
+reveal={reveal}
+
+currentForm={currentForm}
+
+formRevealed={formRevealed}
+
+frenzy={frenzy}
+
+/>
+
+
+</div>
+
+
+
+<div className="mobile-form">
 
 
 <GamePanels
@@ -732,6 +738,7 @@ min-height:22px;
 }
 
 
+
 .frenzy-banner {
 
 position:fixed;
@@ -802,13 +809,11 @@ animation:revealExplosion .8s ease;
 
 @keyframes frenzyPulse {
 
-
 0% {
 
 transform:scale(1);
 
 }
-
 
 50% {
 
@@ -816,20 +821,17 @@ transform:scale(1.12);
 
 }
 
-
 100% {
 
 transform:scale(1);
 
 }
 
-
 }
 
 
 
 @keyframes revealExplosion {
-
 
 0% {
 
@@ -839,7 +841,6 @@ opacity:0;
 
 }
 
-
 40% {
 
 transform:scale(1.2);
@@ -847,7 +848,6 @@ transform:scale(1.2);
 opacity:1;
 
 }
-
 
 100% {
 
@@ -857,23 +857,35 @@ opacity:0;
 
 }
 
-
 }
-
-
 
 
 
 @media(max-width:900px){
 
-
 .game-layout {
 
-flex-direction:column;
+flex-direction:row;
 
-align-items:center;
+align-items:flex-start;
 
-gap:4px;
+justify-content:center;
+
+gap:8px;
+
+width:100%;
+
+}
+
+
+
+.play-column {
+
+order:1;
+
+width:auto;
+
+flex-shrink:1;
 
 }
 
@@ -891,21 +903,13 @@ display:none;
 
 display:flex;
 
-width:100%;
-
-max-width:300px;
-
-order:1;
-
-}
-
-
-
-.play-column {
-
 order:2;
 
-width:100%;
+width:180px;
+
+max-width:180px;
+
+flex-shrink:0;
 
 }
 
@@ -913,64 +917,9 @@ width:100%;
 
 .top-game-info {
 
-grid-template-columns:80px 110px 80px;
+grid-template-columns:70px 90px 70px;
 
-}
-
-
-
-}
-
-
-
-@media(max-width:600px){
-
-
-.game-container {
-
-height:100dvh;
-
-min-height:0;
-
-padding:4px;
-
-overflow:hidden;
-
-}
-
-
-
-h1 {
-
-font-size:32px;
-
-margin-bottom:4px;
-
-}
-
-
-
-.top-game-info {
-
-grid-template-columns:70px 100px 70px;
-
-gap:6px;
-
-}
-
-
-
-.stat-box {
-
-height:40px;
-
-}
-
-
-
-.stat-box strong {
-
-font-size:13px;
+gap:5px;
 
 }
 
@@ -984,11 +933,33 @@ height:60px;
 
 }
 
+}
 
 
-.mobile-form {
 
-max-width:290px;
+@media(max-width:600px){
+
+.game-container {
+
+height:100dvh;
+
+min-height:0;
+
+padding:3px;
+
+overflow:hidden;
+
+}
+
+
+
+h1 {
+
+font-size:30px;
+
+margin:0 0 3px;
+
+letter-spacing:3px;
 
 }
 
@@ -996,13 +967,151 @@ max-width:290px;
 
 .game-layout {
 
-transform:scale(.88);
+display:flex;
 
-transform-origin:top center;
+flex-direction:row;
+
+align-items:flex-start;
+
+justify-content:center;
+
+gap:5px;
+
+width:100%;
+
+max-width:none;
 
 }
 
 
+
+.play-column {
+
+width:auto;
+
+min-width:0;
+
+transform:scale(.72);
+
+transform-origin:top right;
+
+margin-right:-25%;
+
+}
+
+
+
+.mobile-form {
+
+width:135px;
+
+max-width:135px;
+
+min-width:135px;
+
+}
+
+
+
+.top-game-info {
+
+grid-template-columns:58px 78px 58px;
+
+gap:3px;
+
+margin-bottom:4px;
+
+}
+
+
+
+.stat-box {
+
+height:36px;
+
+border-radius:6px;
+
+}
+
+
+
+.stat-box span {
+
+font-size:8px;
+
+}
+
+
+
+.stat-box strong {
+
+font-size:12px;
+
+}
+
+
+
+.next-box {
+
+width:78px;
+
+height:52px;
+
+}
+
+
+
+.game-message {
+
+font-size:13px;
+
+min-height:16px;
+
+}
+
+
+
+}
+
+
+
+@media(max-width:380px){
+
+h1 {
+
+font-size:26px;
+
+}
+
+
+
+.game-layout {
+
+gap:2px;
+
+}
+
+
+
+.play-column {
+
+transform:scale(.64);
+
+margin-right:-30%;
+
+}
+
+
+
+.mobile-form {
+
+width:120px;
+
+max-width:120px;
+
+min-width:120px;
+
+}
 
 }
 
